@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/dashboard.css" type="text/css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Drafts</h1>
+        <% rows.forEach(row => { %>
+        <div class="draft_container">
+            <p><%=row.title%></p>
+            <p><%=row.created_at_date%></p>
+            <form
+                action="/author/dashboard/articles/article/edit-article/<%=row.article_id%>"
+            >
+                <input type="submit" value="Edit" />
+            </form>
+            <form
+                method="post"
+                action="/author/dashboard/articles/article/<%=row.article_id%>?_method=DELETE"
+            >
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="submit" value="Delete" />
+            </form>
+        </div>
+        <%})%>
+        <form action="/author/dashboard/articles/create-article" id="create_article">
+            <input type="submit" value="Create New Draft" />
+        </form>
+    </body>
+</html>

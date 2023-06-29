@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Create A New Article</title>
+    </head>
+    <body>
+        <ul>
+            <% if (typeof details !== 'undefined') {details.forEach(detail => { %>
+            <li><%= detail.message %></li>
+            <% }) } %>
+        </ul>
+        <form action="/author/dashboard/articles/article" method="post">
+            <label for="title">Article Title:</label>
+            <input type="text" name="title" />
+            <label for="subtitle">Article Subtitle:</label>
+            <input type="text" name="subtitle" />
+            <label for="contents">Article Body:</label>
+            <textarea name="contents" cols="30" rows="10"></textarea>
+            <input type="submit" value="Create Article as a Draft" />
+        </form>
+    </body>
+</html>
