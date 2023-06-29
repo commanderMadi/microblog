@@ -8,12 +8,19 @@ let date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
 router.get('/dashboard/articles', (req, res, next) => {
     let query = 'SELECT * FROM Articles WHERE publish_state = "Draft"';
+    let query2 = 'SELECT * FROM Authors WHERE author_id = "1"';
+
     db.all(query, function (err, rows) {
-        if (err) {
-            next(err);
-        } else {
-            res.render('authorDashboard.ejs', { rows });
-        }
+        db.all(query2, function (err2, rows2) {
+            if (err) {
+                next(err);
+            }
+            if (err2) {
+                next(err2);
+            } else {
+                res.render('authorDashboard.ejs', { rows, rows2 });
+            }
+        });
     });
 });
 
