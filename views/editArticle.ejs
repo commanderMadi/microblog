@@ -13,11 +13,11 @@
         >
             <input type="hidden" name="_method" value="PUT" />
             <label for="title">Article Title:</label>
-            <input type="text" name="title" value="<%=row.title%>" />
+            <input required type="text" name="title" value="<%=row.title%>" />
             <label for="subtitle">Article Subtitle:</label>
-            <input type="text" name="subtitle" value="<%=row.subtitle%>" />
+            <input required type="text" name="subtitle" value="<%=row.subtitle%>" />
             <label for="contents">Article Body:</label>
-            <textarea name="contents" cols="30" rows="10">
+            <textarea required name="contents" cols="30" rows="10">
 <%=row.contents%></textarea
             >
             <input type="submit" value="Save Edits" />
