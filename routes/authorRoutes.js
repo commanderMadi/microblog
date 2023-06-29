@@ -25,12 +25,6 @@ router.post('/dashboard/articles/article/', (req, res, next) => {
     let query =
         'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
 
-    const schema = Joi.object().keys({
-        title: Joi.string().required(),
-        subtitle: Joi.string().required(),
-        contents: Joi.string().required(),
-    });
-
     let values = [
         req.body.title,
         req.body.subtitle,
@@ -41,18 +35,14 @@ router.post('/dashboard/articles/article/', (req, res, next) => {
         date,
         'Draft',
     ];
-    const validationResult = schema.validate(req.body);
-    if (validationResult.error) {
-        res.render('createArticle.ejs', { errors });
-    } else {
-        db.all(query, values, function (err, rows) {
-            if (err) {
-                next(err);
-            } else {
-                res.redirect('/author/dashboard/articles');
-            }
-        });
-    }
+
+    db.all(query, values, function (err, rows) {
+        if (err) {
+            next(err);
+        } else {
+            res.redirect('/author/dashboard/articles');
+        }
+    });
 });
 
 router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
