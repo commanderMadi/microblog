@@ -1,7 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
-const validateInsertion = require('../middlewares/validateInsertion');
+const { validateInsertion, validateUpdate } = require('../middlewares/validate');
 const validationSchemas = require('../helpers/validationSchemas');
 
 const router = express.Router();
@@ -25,7 +25,7 @@ router.get('/dashboard/articles/create-article', (req, res, next) => {
 
 router.post(
     '/dashboard/articles/article/',
-    validateInsertion(validationSchemas.article),
+    validateInsertion(validationSchemas.createArticle),
     (req, res, next) => {
         let query =
             'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
@@ -65,7 +65,7 @@ router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
 
 router.put(
     '/dashboard/articles/article/edit-article/:id',
-    validateInsertion(validationSchemas.article),
+    validateUpdate(validationSchemas.updateArticle),
     (req, res, next) => {
         let query =
             'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
