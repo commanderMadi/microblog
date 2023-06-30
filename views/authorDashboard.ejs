@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/dashboard.css" type="text/css" />
-        <title>Document</title>
+        <title>Author Dashboard</title>
     </head>
     <body>
         <div class="blog_details">
@@ -12,8 +12,9 @@
             <h2><%=settingsRow[0].blog_subtitle%></h2>
             <h2><%=settingsRow[0].author_name%></h2>
         </div>
+        <h1>Author Dashboard</h1>
         <h4><a href="/author/dashboard/settings/">Edit Blog Settings</a></h4>
-        <h1>Drafts</h1>
+        <h2>Drafts</h2>
         <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
         <div class="draft_container">
             apft
@@ -45,7 +46,7 @@
             <input type="submit" value="Create New Draft" />
         </form>
 
-        <h1>Published Articles</h1>
+        <h2>Published Articles</h2>
         <div class="published_articles_container">
             <% rows.forEach(article => { if (article.publish_state !== "Draft") { %>
             <p><%=article.title%></p>
