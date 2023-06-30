@@ -1,7 +1,10 @@
 const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
+const passport = require('passport');
 const validate = require('../middleware/validate');
+const checkAuth = require('../middleware/checkAuth');
+const checkNoAuth = require('../middleware/checkNoAuth');
 
 const insertionValidationSchema = require('../controllers/insertionValidationSchema');
 const updateValidationSchema = require('../controllers/updateValidationSchema');
@@ -10,7 +13,7 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-router.get('/dashboard/articles', (req, res, next) => {
+router.get('/dashboard/articles', checkNoAuth, (req, res, next) => {
     let query = 'SELECT * FROM Articles';
     let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
@@ -186,5 +189,29 @@ router.post(
         );
     }
 );
+
+router.get('/login', checkAuth, (req, res, next) => {
+    res.render('authorLogin.ejs', { title: 'Author Login' });
+});
+
+router.post(
+    '/login',
+    passport.authenticate('local', {
+        successRedirect: '/author/dashboard/articles',
+        failureRedirect: '/author/login',
+        failureFlash: true,
+    })
+);
+
+router.get('/dashboard/logout', (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            next(err);
+            return;
+        } else {
+            res.redirect('/');
+        }
+    });
+});
 
 module.exports = router;
