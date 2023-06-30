@@ -15,7 +15,10 @@
         <h1>Author Dashboard</h1>
         <h4><a href="/author/dashboard/settings/">Edit Blog Settings</a></h4>
         <h2>Drafts</h2>
-        <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
+        <% if(messages.success) {%>
+        <p><%=messages.success%></p>
+        <% } %> <% rows.forEach(article => { if (article.publish_state === "Draft") {
+        %>
         <div class="draft_container">
             <p>Article Title: <%=article.title%></p>
             <p>Date Created: <%=article.created_at_date%></p>
