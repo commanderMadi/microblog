@@ -24,6 +24,11 @@ CREATE TABLE IF NOT EXISTS Comments (
     comment_text TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS BlogSettings (
+    blog_name TEXT NOT NULL,
+    blog_title TEXT NOT NULL UNIQUE,
+    blog_subtitle TEXT NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS Authors (
     author_id INTEGER PRIMARY KEY AUTOINCREMENT,
