@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 app.use(methodOverride('_method'));
 
 app.use('/author', authorRoutes);
-app.use(errorHandler);
+// app.use(errorHandler);
 
 global.db = db;
 app.listen(port, () => {

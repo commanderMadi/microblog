@@ -15,7 +15,7 @@ const router = express.Router();
 let date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
 router.get('/dashboard/articles', (req, res, next) => {
-    let query = 'SELECT * FROM Articles WHERE publish_state = "Draft"';
+    let query = 'SELECT * FROM Articles';
     let query2 = 'SELECT * FROM Authors WHERE author_id = "1"';
 
     db.all(query, function (err, rows) {
@@ -34,6 +34,19 @@ router.get('/dashboard/articles', (req, res, next) => {
 
 router.get('/dashboard/articles/create-article', (req, res, next) => {
     res.render('createArticle.ejs');
+});
+
+router.put('/dashboard/articles/article/:id', (req, res, next) => {
+    let query =
+        'UPDATE Articles SET publish_state = "Published", publish_date = ? WHERE article_id = ?';
+    let articletoUpdate = req.params.id;
+    db.all(query, [date, articletoUpdate], function (err, rows) {
+        if (err) {
+            next(err);
+        } else {
+            res.redirect('/author/dashboard/articles');
+        }
+    });
 });
 
 router.post(
@@ -86,9 +99,6 @@ router.put(
             'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
         let articletoUpdate = req.params.id;
         let { title, subtitle, contents } = req.body;
-        console.log('0--------');
-        console.log(req.params);
-        console.log('0--------');
 
         db.all(
             query,
