@@ -6,7 +6,10 @@
         <title>Edit Article</title>
     </head>
     <body>
-        <% rows.forEach(row => { %>
+        <% if(messages.success) { %>
+        <p><%= messages.success %></p>
+        <p><%}%> <% rows.forEach(row => { %></p>
+
         <form
             action="/author/dashboard/articles/article/edit-article/<%=row.article_id%>?_method=PUT"
             method="post"

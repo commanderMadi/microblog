@@ -10,8 +10,6 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-
 router.get('/dashboard/articles', (req, res, next) => {
     let query = 'SELECT * FROM Articles';
     let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
@@ -40,6 +38,8 @@ router.put('/dashboard/articles/article/:id', (req, res, next) => {
     let query =
         'UPDATE Articles SET publish_state = "Published", publish_date = ? WHERE article_id = ?';
     let articletoUpdate = req.params.id;
+    let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+
     db.all(query, [date, articletoUpdate], function (err, rows) {
         if (err) {
             next(err);
@@ -54,8 +54,10 @@ router.post(
     insertionValidationSchema,
     validate,
     (req, res, next) => {
-        let query =
-            'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
+        let query = `INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes",
+             "created_at_date", "modified_at_date", "publish_state")
+             VALUES (?,?,?,?,?,?,?,?)`;
+        let date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
         let values = [
             req.body.title,
@@ -72,6 +74,7 @@ router.post(
             if (err) {
                 next(err);
             } else {
+                req.flash('success', 'Draft created successfully!');
                 res.redirect('/author/dashboard/articles');
             }
         });
@@ -96,20 +99,30 @@ router.put(
     validate,
     (req, res, next) => {
         let query =
-            'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
+            'UPDATE Articles SET title = ?, subtitle = ?, contents= ?, modified_at_date = ? WHERE article_id = ?';
+        let secondQuery = 'SELECT * FROM Articles WHERE article_id = ?';
         let articletoUpdate = req.params.id;
         let { title, subtitle, contents } = req.body;
-
+        let date = moment().format('MMMM Do YYYY, h:mm:ss a');
         db.all(
             query,
-            [title, subtitle, contents, articletoUpdate],
+            [title, subtitle, contents, date, articletoUpdate],
             function (err, rows) {
-                if (err) {
-                    next(err);
-                } else {
-                    console.log('lol');
-                    res.redirect('/author/dashboard/articles');
-                }
+                db.all(
+                    secondQuery,
+                    [articletoUpdate],
+                    function (errorArticle, articleRow) {
+                        if (err) {
+                            next(err);
+                        }
+                        if (errorArticle) {
+                            next(errorArticle);
+                        } else {
+                            req.flash('success', 'Article successfully updated!');
+                            res.render('editArticle.ejs', { rows: articleRow });
+                        }
+                    }
+                );
             }
         );
     }
