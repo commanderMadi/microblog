@@ -16,17 +16,19 @@ let date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
 router.get('/dashboard/articles', (req, res, next) => {
     let query = 'SELECT * FROM Articles';
-    let query2 = 'SELECT * FROM Authors WHERE author_id = "1"';
+    let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
+                  BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
+                  INNER JOIN Authors ON BlogSettings.author_id=Authors.author_id;`;
 
-    db.all(query, function (err, rows) {
-        db.all(query2, function (err2, rows2) {
-            if (err) {
-                next(err);
+    db.all(query, function (errorArticles, rows) {
+        db.all(query2, function (errBlog, settingsRow) {
+            if (errorArticles) {
+                next(errorArticles);
             }
-            if (err2) {
-                next(err2);
+            if (errBlog) {
+                next(errBlog);
             } else {
-                res.render('authorDashboard.ejs', { rows, rows2 });
+                res.render('authorDashboard.ejs', { rows, settingsRow });
             }
         });
     });
