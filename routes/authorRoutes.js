@@ -57,9 +57,7 @@ router.post(
         let query = `INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes",
              "created_at_date", "modified_at_date", "publish_state")
              VALUES (?,?,?,?,?,?,?,?)`;
-        let secondQuery = 'SELECT * FROM Articles WHERE article_id = ?';
         let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-        let articleID = req.body.article_id;
 
         let values = [
             req.body.title,
@@ -76,6 +74,7 @@ router.post(
             if (err) {
                 next(err);
             } else {
+                req.flash('success', 'Draft created successfully!');
                 res.redirect('/author/dashboard/articles');
             }
         });
