@@ -2,13 +2,16 @@ const express = require('express');
 const session = require('express-session');
 const expressValidator = require('express-validator');
 const flash = require('express-flash');
+const passport = require('passport');
 const sqlite3 = require('sqlite3').verbose();
 const methodOverride = require('method-override');
 const errorHandler = require('./middleware/errorhandler');
 const authorRoutes = require('./routes/authorRoutes');
 const readerRoutes = require('./routes/readerRoutes');
+const initializePassport = require('./middleware/passportConfig');
 
 require('dotenv').config();
+initializePassport(passport);
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,10 +26,11 @@ app.use(
         // Should we resave our session variables if nothing has changes which we dont
         resave: false,
         // Save empty value if there is no vaue which we do not want to do
-        saveUninitialized: false,
+        saveUninitialized: true,
     })
 );
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 //items in the global namespace are accessible throught out the node application
