@@ -1,6 +1,14 @@
 const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
+const validateInsertion = require('../middleware/validateInsertion');
+const validateEdit = require('../middleware/validateEdit');
+
+const {
+    insertionValidationSchema,
+} = require('../controllers/insertionValidationSchema');
+const { updateValidationSchema } = require('../controllers/updateValidationSchema');
+const { body } = require('express-validator');
 
 const router = express.Router();
 
@@ -28,29 +36,34 @@ router.get('/dashboard/articles/create-article', (req, res, next) => {
     res.render('createArticle.ejs');
 });
 
-router.post('/dashboard/articles/article/', (req, res, next) => {
-    let query =
-        'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
+router.post(
+    '/dashboard/articles/article/',
+    insertionValidationSchema,
+    validateInsertion,
+    (req, res, next) => {
+        let query =
+            'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
 
-    let values = [
-        req.body.title,
-        req.body.subtitle,
-        req.body.contents,
-        1,
-        0,
-        date,
-        date,
-        'Draft',
-    ];
+        let values = [
+            req.body.title,
+            req.body.subtitle,
+            req.body.contents,
+            1,
+            0,
+            date,
+            date,
+            'Draft',
+        ];
 
-    db.all(query, values, function (err, rows) {
-        if (err) {
-            next(err);
-        } else {
-            res.redirect('/author/dashboard/articles');
-        }
-    });
-});
+        db.all(query, values, function (err, rows) {
+            if (err) {
+                next(err);
+            } else {
+                res.redirect('/author/dashboard/articles');
+            }
+        });
+    }
+);
 
 router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
     let query = 'SELECT * FROM Articles WHERE article_id = ?';
@@ -64,28 +77,33 @@ router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
     });
 });
 
-router.put('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
-    let query =
-        'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
-    let articletoUpdate = req.params.id;
-    let { title, subtitle, contents } = req.body;
-    console.log('0--------');
-    console.log(req.params);
-    console.log('0--------');
+router.put(
+    '/dashboard/articles/article/edit-article/:id',
+    updateValidationSchema,
+    validateEdit,
+    (req, res, next) => {
+        let query =
+            'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
+        let articletoUpdate = req.params.id;
+        let { title, subtitle, contents } = req.body;
+        console.log('0--------');
+        console.log(req.params);
+        console.log('0--------');
 
-    db.all(
-        query,
-        [title, subtitle, contents, articletoUpdate],
-        function (err, rows) {
-            if (err) {
-                next(err);
-            } else {
-                console.log('lol');
-                res.redirect('/author/dashboard/articles');
+        db.all(
+            query,
+            [title, subtitle, contents, articletoUpdate],
+            function (err, rows) {
+                if (err) {
+                    next(err);
+                } else {
+                    console.log('lol');
+                    res.redirect('/author/dashboard/articles');
+                }
             }
-        }
-    );
-});
+        );
+    }
+);
 
 router.delete('/dashboard/articles/article/:id', (req, res, next) => {
     let query = 'DELETE FROM Articles WHERE article_id = ?';

@@ -1,10 +1,10 @@
 const express = require('express');
 const session = require('express-session');
-
+const expressValidator = require('express-validator');
 const flash = require('express-flash');
 const sqlite3 = require('sqlite3').verbose();
 const methodOverride = require('method-override');
-
+const errorHandler = require('./middleware/errorhandler');
 require('dotenv').config();
 
 const app = express();
@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 app.use(methodOverride('_method'));
 
 app.use('/author', authorRoutes);
+app.use(errorHandler);
 
 global.db = db;
 app.listen(port, () => {
