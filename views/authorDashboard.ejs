@@ -17,9 +17,9 @@
         <h2>Drafts</h2>
         <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
         <div class="draft_container">
-            apft
-            <p><%=article.title%></p>
-            <p><%=article.created_at_date%></p>
+            <p>Article Title: <%=article.title%></p>
+            <p>Date Created: <%=article.created_at_date%></p>
+            <p>Date Modified: <%=article.modified_at_date%></p>
             <form
                 action="/author/dashboard/articles/article/<%=article.article_id%>?_method=PUT"
                 method="post"
@@ -49,8 +49,11 @@
         <h2>Published Articles</h2>
         <div class="published_articles_container">
             <% rows.forEach(article => { if (article.publish_state !== "Draft") { %>
-            <p><%=article.title%></p>
-            <p><%=article.publish_date%></p>
+            <p>Article Title: <%=article.title%></p>
+            <p>Date Created: <%=article.created_at_date%></p>
+            <p>Date Published: <%=article.publish_date%></p>
+            <p>Date Modified: <%=article.modified_at_date%></p>
+
             <form
                 action="/author/dashboard/articles/article/edit-article/<%=article.article_id%>"
             >
