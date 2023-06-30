@@ -6,7 +6,11 @@
         <title>Create A New Article</title>
     </head>
     <body>
-        <ul></ul>
+        <div>
+            <%if (typeof errors !== 'undefined') errors.forEach(error => { %>
+            <p><%=error.msg%></p>
+            <%}) %>
+        </div>
         <form action="/author/dashboard/articles/article" method="post">
             <label for="title">Article Title:</label>
             <input required type="text" name="title" />
