@@ -57,7 +57,9 @@ router.post(
         let query = `INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes",
              "created_at_date", "modified_at_date", "publish_state")
              VALUES (?,?,?,?,?,?,?,?)`;
+        let secondQuery = 'SELECT * FROM Articles WHERE article_id = ?';
         let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+        let articleID = req.body.article_id;
 
         let values = [
             req.body.title,
@@ -99,20 +101,29 @@ router.put(
     (req, res, next) => {
         let query =
             'UPDATE Articles SET title = ?, subtitle = ?, contents= ?, modified_at_date = ? WHERE article_id = ?';
+        let secondQuery = 'SELECT * FROM Articles WHERE article_id = ?';
         let articletoUpdate = req.params.id;
         let { title, subtitle, contents } = req.body;
         let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-
         db.all(
             query,
             [title, subtitle, contents, date, articletoUpdate],
             function (err, rows) {
-                if (err) {
-                    next(err);
-                } else {
-                    console.log('lol');
-                    res.redirect('/author/dashboard/articles');
-                }
+                db.all(
+                    secondQuery,
+                    [articletoUpdate],
+                    function (errorArticle, articleRow) {
+                        if (err) {
+                            next(err);
+                        }
+                        if (errorArticle) {
+                            next(errorArticle);
+                        } else {
+                            req.flash('success', 'Article successfully updated!');
+                            res.render('editArticle.ejs', { rows: articleRow });
+                        }
+                    }
+                );
             }
         );
     }
