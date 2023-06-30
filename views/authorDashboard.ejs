@@ -8,31 +8,61 @@
     </head>
     <body>
         <div class="blog_details">
-            <h1><%=rows2[0].author_name%></h1>
-            <h2><%=rows2[0].author_email%></h2>
-            <h2><%=rows2[0].author_name%></h2>
+            <h1><%=settingsRow[0].blog_title%></h1>
+            <h2><%=settingsRow[0].blog_subtitle%></h2>
+            <h2><%=settingsRow[0].author_name%></h2>
         </div>
+        <h4><a href="/author/dashboard/settings/">Edit Blog Settings</a></h4>
         <h1>Drafts</h1>
-        <% rows.forEach(row => { %>
+        <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
         <div class="draft_container">
-            <p><%=row.title%></p>
-            <p><%=row.created_at_date%></p>
+            apft
+            <p><%=article.title%></p>
+            <p><%=article.created_at_date%></p>
             <form
-                action="/author/dashboard/articles/article/edit-article/<%=row.article_id%>"
+                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=PUT"
+                method="post"
+            >
+                <input type="hidden" name="_method" value="PUT" />
+                <input type="submit" value="Publish" />
+            </form>
+            <form
+                action="/author/dashboard/articles/article/edit-article/<%=article.article_id%>"
             >
                 <input type="submit" value="Edit" />
             </form>
             <form
                 method="post"
-                action="/author/dashboard/articles/article/<%=row.article_id%>?_method=DELETE"
+                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=DELETE"
             >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="submit" value="Delete" />
             </form>
         </div>
-        <%})%>
+        <%}})%>
+
         <form action="/author/dashboard/articles/create-article" id="create_article">
             <input type="submit" value="Create New Draft" />
         </form>
+
+        <h1>Published Articles</h1>
+        <div class="published_articles_container">
+            <% rows.forEach(article => { if (article.publish_state !== "Draft") { %>
+            <p><%=article.title%></p>
+            <p><%=article.publish_date%></p>
+            <form
+                action="/author/dashboard/articles/article/edit-article/<%=article.article_id%>"
+            >
+                <input type="submit" value="Edit" />
+            </form>
+            <form
+                method="post"
+                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=DELETE"
+            >
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="submit" value="Delete" />
+            </form>
+        </div>
+        <%}}) %>
     </body>
 </html>
