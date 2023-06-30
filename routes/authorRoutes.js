@@ -1,13 +1,11 @@
 const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
-const validateInsertion = require('../middleware/validateInsertion');
-const validateEdit = require('../middleware/validateEdit');
+const validate = require('../middleware/validate');
 
-const {
-    insertionValidationSchema,
-} = require('../controllers/insertionValidationSchema');
-const { updateValidationSchema } = require('../controllers/updateValidationSchema');
+const insertionValidationSchema = require('../controllers/insertionValidationSchema');
+const updateValidationSchema = require('../controllers/updateValidationSchema');
+const updateSettingsValidationSchema = require('../controllers/updateSettingsValidationSchema');
 const { body } = require('express-validator');
 
 const router = express.Router();
@@ -52,9 +50,9 @@ router.put('/dashboard/articles/article/:id', (req, res, next) => {
 });
 
 router.post(
-    '/dashboard/articles/article/',
+    '/dashboard/articles/article/create-article',
     insertionValidationSchema,
-    validateInsertion,
+    validate,
     (req, res, next) => {
         let query =
             'INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes", "created_at_date", "modified_at_date", "publish_state") VALUES (?,?,?,?,?,?,?,?)';
@@ -95,7 +93,7 @@ router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
 router.put(
     '/dashboard/articles/article/edit-article/:id',
     updateValidationSchema,
-    validateEdit,
+    validate,
     (req, res, next) => {
         let query =
             'UPDATE Articles SET title = ?, subtitle = ?, contents= ? WHERE article_id = ?';
@@ -131,5 +129,49 @@ router.delete('/dashboard/articles/article/:id', (req, res, next) => {
         }
     });
 });
+
+router.get('/dashboard/settings', (req, res, next) => {
+    let query = `SELECT BlogSettings.author_id, Authors.author_name, 
+                  BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
+                  INNER JOIN Authors ON BlogSettings.author_id=Authors.author_id;`;
+
+    db.all(query, function (err, rows) {
+        if (err) {
+            console.log(err);
+            next(err);
+        } else {
+            console.log(rows);
+            res.render('blogSettings.ejs', { rows });
+        }
+    });
+});
+
+router.post(
+    '/dashboard/settings',
+    updateSettingsValidationSchema,
+    validate,
+    (req, res, next) => {
+        let query = `UPDATE BlogSettings SET blog_title = ?, blog_subtitle = ?;`;
+        let secondQuery = `UPDATE Authors SET author_name = ?`;
+
+        let { blog_title, blog_subtitle, author_name } = req.body;
+        db.all(
+            query,
+            [blog_title, blog_subtitle],
+            function (errBlogSettings, rowBlogSettings) {
+                db.all(secondQuery, [author_name], function (errAuthor, authorRow) {
+                    if (errBlogSettings) {
+                        next(errBlogSettings);
+                    }
+                    if (errAuthor) {
+                        next(errAuthor);
+                    } else {
+                        res.redirect('/author/dashboard/articles');
+                    }
+                });
+            }
+        );
+    }
+);
 
 module.exports = router;

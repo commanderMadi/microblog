@@ -12,6 +12,7 @@
             <h2><%=settingsRow[0].blog_subtitle%></h2>
             <h2><%=settingsRow[0].author_name%></h2>
         </div>
+        <h4><a href="/author/dashboard/settings/">Edit Blog Settings</a></h4>
         <h1>Drafts</h1>
         <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
         <div class="draft_container">

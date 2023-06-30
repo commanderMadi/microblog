@@ -5,6 +5,9 @@ const flash = require('express-flash');
 const sqlite3 = require('sqlite3').verbose();
 const methodOverride = require('method-override');
 const errorHandler = require('./middleware/errorhandler');
+const authorRoutes = require('./routes/authorRoutes');
+const readerRoutes = require('./routes/readerRoutes');
+
 require('dotenv').config();
 
 const app = express();
@@ -37,18 +40,14 @@ global.db = new sqlite3.Database('./database.db', function (err) {
     }
 });
 
-const authorRoutes = require('./routes/authorRoutes');
-
 //set the app to use ejs for rendering
 app.set('view engine', 'ejs');
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
 app.use(methodOverride('_method'));
 
 app.use('/author', authorRoutes);
-// app.use(errorHandler);
+app.use('/', readerRoutes);
+
+app.use(errorHandler);
 
 global.db = db;
 app.listen(port, () => {
