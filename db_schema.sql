@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS Comments (
 
 CREATE TABLE IF NOT EXISTS BlogSettings (
     blog_title TEXT NOT NULL,
-    blog_subtitle TEXT NOT NULL
+    blog_subtitle TEXT NOT NULL,
+    author_id INTEGER NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES Authors (author_id)
 );
 
 CREATE TABLE IF NOT EXISTS Authors (
@@ -36,8 +38,8 @@ CREATE TABLE IF NOT EXISTS Authors (
     author_password TEXT NOT NULL
 );
 
-INSERT INTO Authors ("author_name", "author_email", "author_password") VALUES ("admin", "admin@bloggy.com", "admintest123");
-INSERT INTO BlogSettings ("blog_title", "blog_subtitle") VALUES ("Bloggy", "A Simple Microblogging Portable Platform");
+INSERT INTO Authors ("author_name", "author_email", "author_password") VALUES ("Admin", "admin@bloggy.com", "admintest123");
+INSERT INTO BlogSettings ("blog_title", "blog_subtitle", "author_id") VALUES ("Bloggy", "A Simple Microblogging Portable Platform", 1);
 
 
 COMMIT;
