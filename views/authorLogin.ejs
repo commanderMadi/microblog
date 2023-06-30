@@ -7,9 +7,10 @@
     </head>
 
     <body>
+        <% if (messages.error) { %>
+        <li><%= messages.error %></li>
+        <% } %>
         <form action="login" method="post">
-            <label for="username">User Name:</label>
-            <input type="text" name="username" id="login_username" />
             <label for="email">E-mail:</label>
             <input type="text" name="email" id="login_email" />
             <label for="password">Password:</label>
