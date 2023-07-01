@@ -11,7 +11,7 @@
         <p><%}%> <% rows.forEach(row => { %></p>
 
         <form
-            action="/author/dashboard/articles/article/edit-article/<%=row.article_id%>?_method=PUT"
+            action="/dashboard/article/edit-article/<%=row.article_id%>?_method=PUT"
             method="post"
         >
             <input type="hidden" name="_method" value="PUT" />
@@ -25,7 +25,7 @@
             >
             <input type="submit" value="Save Edits" />
         </form>
-        <a href="/author/dashboard/articles">Discard Changes</a>
+        <a href="/dashboard">Discard Changes</a>
 
         <%})%>
     </body>

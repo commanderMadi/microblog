@@ -11,10 +11,7 @@
             <p><%=error.msg%></p>
             <%}) %>
         </div>
-        <form
-            action="/author/dashboard/articles/article/create-article"
-            method="post"
-        >
+        <form action="/dashboard/article/create-article" method="post">
             <label for="title">Article Title:</label>
             <input required type="text" name="title" />
             <label for="subtitle">Article Subtitle:</label>

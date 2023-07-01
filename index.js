@@ -6,6 +6,7 @@ const passport = require('passport');
 const sqlite3 = require('sqlite3').verbose();
 const methodOverride = require('method-override');
 const errorHandler = require('./middleware/errorhandler');
+const loginRoutes = require('./routes/loginRoutes');
 const authorRoutes = require('./routes/authorRoutes');
 const readerRoutes = require('./routes/readerRoutes');
 const initializePassport = require('./middleware/passportConfig');
@@ -48,7 +49,8 @@ global.db = new sqlite3.Database('./database.db', function (err) {
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 
-app.use('/author', authorRoutes);
+app.use('/login', loginRoutes);
+app.use('/dashboard', authorRoutes);
 app.use('/', readerRoutes);
 
 app.use(errorHandler);

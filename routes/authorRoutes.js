@@ -1,9 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
-const passport = require('passport');
 const validate = require('../middleware/validate');
-const checkAuth = require('../middleware/checkAuth');
 const checkNoAuth = require('../middleware/checkNoAuth');
 
 const insertionValidationSchema = require('../controllers/insertionValidationSchema');
@@ -13,7 +11,7 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-router.get('/dashboard/articles', checkNoAuth, (req, res, next) => {
+router.get('/', checkNoAuth, (req, res, next) => {
     let query = 'SELECT * FROM Articles';
     let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
@@ -33,11 +31,11 @@ router.get('/dashboard/articles', checkNoAuth, (req, res, next) => {
     });
 });
 
-router.get('/dashboard/articles/create-article', (req, res, next) => {
+router.get('/article/create-article', (req, res, next) => {
     res.render('createArticle.ejs');
 });
 
-router.put('/dashboard/articles/article/:id', (req, res, next) => {
+router.put('/article/:id', (req, res, next) => {
     let query =
         'UPDATE Articles SET publish_state = "Published", publish_date = ? WHERE article_id = ?';
     let articletoUpdate = req.params.id;
@@ -47,13 +45,13 @@ router.put('/dashboard/articles/article/:id', (req, res, next) => {
         if (err) {
             next(err);
         } else {
-            res.redirect('/author/dashboard/articles');
+            res.redirect('/dashboard/');
         }
     });
 });
 
 router.post(
-    '/dashboard/articles/article/create-article',
+    '/article/create-article',
     insertionValidationSchema,
     validate,
     (req, res, next) => {
@@ -78,13 +76,13 @@ router.post(
                 next(err);
             } else {
                 req.flash('success', 'Draft created successfully!');
-                res.redirect('/author/dashboard/articles');
+                res.redirect('/dashboard');
             }
         });
     }
 );
 
-router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
+router.get('/article/edit-article/:id', (req, res, next) => {
     let query = 'SELECT * FROM Articles WHERE article_id = ?';
     let id = req.params.id;
     db.all(query, [id], function (err, rows) {
@@ -97,7 +95,7 @@ router.get('/dashboard/articles/article/edit-article/:id', (req, res, next) => {
 });
 
 router.put(
-    '/dashboard/articles/article/edit-article/:id',
+    '/article/edit-article/:id',
     updateValidationSchema,
     validate,
     (req, res, next) => {
@@ -131,7 +129,7 @@ router.put(
     }
 );
 
-router.delete('/dashboard/articles/article/:id', (req, res, next) => {
+router.delete('/article/:id', (req, res, next) => {
     let query = 'DELETE FROM Articles WHERE article_id = ?';
     let articleToDelete = req.params.id;
 
@@ -140,13 +138,12 @@ router.delete('/dashboard/articles/article/:id', (req, res, next) => {
             console.log(err);
             next(err);
         } else {
-            console.log('lol');
-            res.redirect('/author/dashboard/articles');
+            res.redirect('/dashboard');
         }
     });
 });
 
-router.get('/dashboard/settings', (req, res, next) => {
+router.get('/settings', (req, res, next) => {
     let query = `SELECT BlogSettings.author_id, Authors.author_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
                   INNER JOIN Authors ON BlogSettings.author_id=Authors.author_id;`;
@@ -163,7 +160,7 @@ router.get('/dashboard/settings', (req, res, next) => {
 });
 
 router.post(
-    '/dashboard/settings',
+    '/settings',
     updateSettingsValidationSchema,
     validate,
     (req, res, next) => {
@@ -182,7 +179,7 @@ router.post(
                     if (errAuthor) {
                         next(errAuthor);
                     } else {
-                        res.redirect('/author/dashboard/articles');
+                        res.redirect('/dashboard');
                     }
                 });
             }
@@ -190,20 +187,7 @@ router.post(
     }
 );
 
-router.get('/login', checkAuth, (req, res, next) => {
-    res.render('authorLogin.ejs', { title: 'Author Login' });
-});
-
-router.post(
-    '/login',
-    passport.authenticate('local', {
-        successRedirect: '/author/dashboard/articles',
-        failureRedirect: '/author/login',
-        failureFlash: true,
-    })
-);
-
-router.get('/dashboard/logout', (req, res, next) => {
+router.get('/logout', (req, res, next) => {
     req.logout((err) => {
         if (err) {
             next(err);

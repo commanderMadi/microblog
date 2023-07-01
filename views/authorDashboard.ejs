@@ -13,8 +13,8 @@
             <h2><%=settingsRow[0].author_name%></h2>
         </div>
         <h1>Author Dashboard</h1>
-        <h4><a href="/author/dashboard/settings/">Edit Blog Settings</a></h4>
-        <h4><a href="/author/dashboard/logout/">Log out</a></h4>
+        <h4><a href="/dashboard/settings/">Edit Blog Settings</a></h4>
+        <h4><a href="/dashboard/logout/">Log out</a></h4>
         <h2>Drafts</h2>
         <% if(messages.success) {%>
         <p><%=messages.success%></p>
@@ -25,20 +25,18 @@
             <p>Date Created: <%=article.created_at_date%></p>
             <p>Date Modified: <%=article.modified_at_date%></p>
             <form
-                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=PUT"
+                action="/dashboard/article/<%=article.article_id%>?_method=PUT"
                 method="post"
             >
                 <input type="hidden" name="_method" value="PUT" />
                 <input type="submit" value="Publish" />
             </form>
-            <form
-                action="/author/dashboard/articles/article/edit-article/<%=article.article_id%>"
-            >
+            <form action="/dashboard/article/edit-article/<%=article.article_id%>">
                 <input type="submit" value="Edit" />
             </form>
             <form
                 method="post"
-                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=DELETE"
+                action="/dashboard/article/<%=article.article_id%>?_method=DELETE"
             >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="submit" value="Delete" />
@@ -46,7 +44,7 @@
         </div>
         <%}})%>
 
-        <form action="/author/dashboard/articles/create-article" id="create_article">
+        <form action="/dashboard/article/create-article" id="create_article">
             <input type="submit" value="Create New Draft" />
         </form>
 
@@ -58,14 +56,12 @@
             <p>Date Published: <%=article.publish_date%></p>
             <p>Date Modified: <%=article.modified_at_date%></p>
 
-            <form
-                action="/author/dashboard/articles/article/edit-article/<%=article.article_id%>"
-            >
+            <form action="/dashboard/article/edit-article/<%=article.article_id%>">
                 <input type="submit" value="Edit" />
             </form>
             <form
                 method="post"
-                action="/author/dashboard/articles/article/<%=article.article_id%>?_method=DELETE"
+                action="/dashboard/article/<%=article.article_id%>?_method=DELETE"
             >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="submit" value="Delete" />

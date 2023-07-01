@@ -54,7 +54,7 @@ function initialize(passport) {
             if (err) {
                 return done(err);
             }
-            console.log(`ID is ${rows[0].id}`);
+            console.log(`ID is ${rows[0].author_id}`);
             return done(null, rows[0]);
         });
     });
