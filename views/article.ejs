@@ -30,6 +30,16 @@
             <textarea name="comment" id="" cols="30" rows="10"></textarea>
             <input type="submit" value="Add a Comment" />
         </form>
+        <form action="/article/interact" method="post">
+            <input hidden type="text" name="articleID" value="<%=row.article_id%>" />
+            <input
+                hidden
+                type="text"
+                name="likesCount"
+                value="<%=row.likes_count%>"
+            />
+            <input type="submit" value="Like" />
+        </form>
         <%} else {%>
         <h3>
             <a href="/login">Sign in</a> to add a comment or to interact with the

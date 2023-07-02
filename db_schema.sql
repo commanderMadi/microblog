@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS Comments (
 CREATE TABLE IF NOT EXISTS Likes (
     like_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
+    article_id INTEGER NOT NULL,
+    FOREIGN KEY (article_id) REFERENCES Articles (article_id),
     FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 

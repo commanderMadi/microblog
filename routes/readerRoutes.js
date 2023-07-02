@@ -45,7 +45,6 @@ router.get('/article/:id', (req, res, next) => {
 router.post('/article', (req, res, next) => {
     let query = `INSERT INTO Comments ("article_id", "comment_text", "comment_author", "user_id")
                 VALUES (?,?,?,?)`;
-    let prevPage = req.originalUrl;
     let { comment, id } = req.body;
     let commentAuthor = req.user.user_name;
     let userId = req.user.user_id;
@@ -57,6 +56,34 @@ router.post('/article', (req, res, next) => {
         } else {
             res.redirect(`/article/${id}`);
         }
+    });
+});
+
+router.post('/article/interact', (req, res, next) => {
+    let query = `INSERT INTO Likes ("user_id", "article_id")
+                VALUES (?,?)`;
+    let secondQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
+    let { articleID, likesCount } = req.body;
+    let userId = req.user.user_id;
+    let numericID = parseInt(articleID);
+    let numericLikeCount = parseInt(likesCount);
+    numericLikeCount++;
+
+    db.all(query, [userId, numericID], function (err, row) {
+        db.all(
+            secondQuery,
+            [numericLikeCount, numericID],
+            function (errTwo, rowsTwo) {
+                if (err) {
+                    next(err);
+                }
+                if (errTwo) {
+                    next(errTwo);
+                } else {
+                    res.redirect(`/article/${articleID}`);
+                }
+            }
+        );
     });
 });
 
