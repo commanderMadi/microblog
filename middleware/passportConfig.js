@@ -2,15 +2,12 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
 function initialize(passport) {
-    console.log('Initialized');
-
     const authenticateUser = (email, password, done) => {
         let query = `SELECT * FROM Authors WHERE author_email = ?`;
         db.all(query, [email], function (err, rows) {
             if (err) {
                 throw err;
             }
-            console.log(rows);
 
             if (rows.length > 0) {
                 const author = rows[0];
@@ -54,7 +51,6 @@ function initialize(passport) {
             if (err) {
                 return done(err);
             }
-            console.log(`ID is ${rows[0].author_id}`);
             return done(null, rows[0]);
         });
     });
