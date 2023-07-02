@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const assert = require('assert');
+const checkUserNotAuth = require('../middleware/checkUserNotAuth');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkUserNotAuth, (req, res, next) => {
     let query =
         'SELECT * FROM Articles WHERE publish_state = "Published" ORDER BY publish_date DESC';
     let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 

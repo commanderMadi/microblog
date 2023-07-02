@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <!--Passport failed authentication messages-->
+        <% if (messages.error) { %>
+        <li><%= messages.error %>.</li>
+        <% } %>
+        <!--Express Flash Messages-->
+        <% if (messages.success_msg) { %>
+        <li><%= messages.success_msg %></li>
+        <% } %>
+        <form action="/login" method="post">
+            <input type="email" name="email" />
+            <input type="password" name="password" />
+            <input type="submit" value="Sign In" />
+        </form>
+        <h3>Don't have an account? <a href="/register/">Register</a></h3>
+    </body>
+</html>

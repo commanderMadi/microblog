@@ -2,7 +2,7 @@ const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
 const validate = require('../middleware/validate');
-const checkNoAuth = require('../middleware/checkNoAuth');
+const checkAuthorNotAuth = require('../middleware/checkAuthorNotAuth');
 
 const insertionValidationSchema = require('../controllers/insertionValidationSchema');
 const updateValidationSchema = require('../controllers/updateValidationSchema');
@@ -11,7 +11,7 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-router.get('/', checkNoAuth, (req, res, next) => {
+router.get('/', checkAuthorNotAuth, (req, res, next) => {
     let query = 'SELECT * FROM Articles';
     let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings

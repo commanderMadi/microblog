@@ -6,13 +6,17 @@ const passport = require('passport');
 const sqlite3 = require('sqlite3').verbose();
 const methodOverride = require('method-override');
 const errorHandler = require('./middleware/errorhandler');
-const loginRoutes = require('./routes/loginRoutes');
+const authorAuthRoutes = require('./routes/authorAuthRoutes');
+const userLoginRoutes = require('./routes/userLoginRoutes');
+const userRegisterRoutes = require('./routes/userRegisterRoutes');
 const authorRoutes = require('./routes/authorRoutes');
 const readerRoutes = require('./routes/readerRoutes');
-const initializePassport = require('./middleware/passportConfig');
+const initializeAuthorPassport = require('./middleware/authorPassportConfig');
+const initializeUserPassport = require('./middleware/userPassportConfig');
 
 require('dotenv').config();
-initializePassport(passport);
+initializeAuthorPassport(passport);
+initializeUserPassport(passport);
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -52,13 +56,15 @@ global.db = new sqlite3.Database('./database.db', function (err) {
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 
-app.use('/login', loginRoutes);
+app.use('/dashboard/login', authorAuthRoutes);
 app.use('/dashboard', authorRoutes);
+app.use('/login', userLoginRoutes);
+app.use('/register', userRegisterRoutes);
 app.use('/', readerRoutes);
 
 // app.use(errorHandler);
 
 global.db = db;
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`Server up and listening on port ${port}`);
 });

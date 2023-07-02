@@ -1,9 +1,10 @@
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 
 const validate = (req, res, next) => {
     let result = validationResult(req);
     if (!result.isEmpty()) {
-        next(result.errors);
+        res.locals.result = result;
+        next();
     } else {
         next();
     }

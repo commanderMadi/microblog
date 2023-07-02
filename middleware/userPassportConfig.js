@@ -3,25 +3,28 @@ const bcrypt = require('bcrypt');
 
 function initialize(passport) {
     const authenticateUser = (email, password, done) => {
-        let query = `SELECT * FROM Authors WHERE author_email = ?`;
+        let query = `SELECT * FROM Users WHERE user_email = ?`;
         db.all(query, [email], function (err, rows) {
             if (err) {
                 throw err;
             }
-
             if (rows.length > 0) {
-                const author = rows[0];
-
-                if (password === author.author_password) {
-                    return done(null, author);
-                } else {
-                    //password is incorrect
-                    return done(null, false, {
-                        message: 'Password is incorrect',
-                    });
-                }
+                const user = rows[0];
+                bcrypt.compare(password, user.user_password, (err, matched) => {
+                    console.log(matched);
+                    if (matched) {
+                        return done(null, user);
+                    } else {
+                        //password is incorrect
+                        return done(null, false, {
+                            message: 'Incorrect password. Try again!',
+                        });
+                    }
+                });
             } else {
-                // No user
+                console.log(rows);
+
+                // No user found in DB
                 return done(null, false, {
                     message: 'No user with that email address',
                 });
@@ -39,15 +42,15 @@ function initialize(passport) {
     // object should be stored in the session. The result of the serializeUser method is attached
     // to the session as req.session.passport.user = {}. Here for instance, it would be (as we provide
     //   the user id as the key) req.session.passport.user = {id: 'xyz'}
-    passport.serializeUser((author, done) => {
-        done(null, author.author_id);
+    passport.serializeUser((user, done) => {
+        done(null, user.user_id);
     });
 
     // In deserializeUser that key is matched with the in memory array / database or any data resource.
     // The fetched object is attached to the request object as req.user
 
     passport.deserializeUser((id, done) => {
-        db.all(`SELECT * FROM Authors WHERE author_id = ?`, [id], (err, rows) => {
+        db.all(`SELECT * FROM Users WHERE user_id = ?`, [id], (err, rows) => {
             if (err) {
                 return done(err);
             }
