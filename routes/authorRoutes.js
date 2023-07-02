@@ -135,6 +135,7 @@ router.delete('/article/:id', (req, res, next) => {
 
     db.all(query, [articleToDelete], function (err, rows) {
         if (err) {
+            console.log(err);
             next(err);
         } else {
             res.redirect('/dashboard');
@@ -149,8 +150,10 @@ router.get('/settings', (req, res, next) => {
 
     db.all(query, function (err, rows) {
         if (err) {
+            console.log(err);
             next(err);
         } else {
+            console.log(rows);
             res.render('blogSettings.ejs', { rows });
         }
     });
