@@ -15,16 +15,27 @@
         <h5>Article Body</h5>
         <p><%=row.contents%></p>
 
+        <h6>Likes Count</h6>
+        <p><%=row.likes_count%></p>
+
         <div>
-            <% commentsRows.forEach(comment => {%> <%console.log(comment)%>
+            <% commentsRows.forEach(comment => {%>
             <p><%=comment.comment_text%></p>
             <%})%>
         </div>
 
+        <% if (req.user) {%>
         <form action="/article/" method="post">
             <input hidden type="text" name="id" value="<%=row.article_id%>" />
             <textarea name="comment" id="" cols="30" rows="10"></textarea>
             <input type="submit" value="Add a Comment" />
         </form>
+        <%} else {%>
+        <h3>
+            <a href="/login">Sign in</a> to add a comment or to interact with the
+            article!
+        </h3>
+
+        <%}%>
     </body>
 </html>

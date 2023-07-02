@@ -1,8 +1,7 @@
-function checkUserNotAuth(req, res, next) {
+function checkNotLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-
     res.redirect('/login');
 }
-module.exports = checkUserNotAuth;
+module.exports = checkNotLoggedIn;

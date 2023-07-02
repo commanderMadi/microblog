@@ -2,7 +2,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
 function initialize(passport) {
-    const authenticateUser = (email, password, done) => {
+    const authenticateUser = async (email, password, done) => {
         let query = `SELECT * FROM Users WHERE user_email = ?`;
         db.all(query, [email], function (err, rows) {
             if (err) {
@@ -10,9 +10,14 @@ function initialize(passport) {
             }
             if (rows.length > 0) {
                 const user = rows[0];
-                bcrypt.compare(password, user.user_password, (err, matched) => {
-                    console.log(matched);
-                    if (matched) {
+                if (user.user_role !== 'Author') {
+                    bcrypt.compare(password, user.user_password, (err, matched) => {
+                        if (matched) {
+                            return done(null, user);
+                        }
+                    });
+                } else if (user.user_role === 'Author') {
+                    if (password === user.user_password) {
                         return done(null, user);
                     } else {
                         //password is incorrect
@@ -20,10 +25,8 @@ function initialize(passport) {
                             message: 'Incorrect password. Try again!',
                         });
                     }
-                });
+                }
             } else {
-                console.log(rows);
-
                 // No user found in DB
                 return done(null, false, {
                     message: 'No user with that email address',

@@ -2,7 +2,8 @@ const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
 const validate = require('../middleware/validate');
-const checkAuthorNotAuth = require('../middleware/checkAuthorNotAuth');
+const checkNotLoggedIn = require('../middleware/checkNotLoggedIn');
+const checkRole = require('../middleware/checkRole');
 
 const insertionValidationSchema = require('../controllers/insertionValidationSchema');
 const updateValidationSchema = require('../controllers/updateValidationSchema');
@@ -11,11 +12,11 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-router.get('/', checkAuthorNotAuth, (req, res, next) => {
+router.get('/', checkNotLoggedIn, checkRole, (req, res, next) => {
     let query = 'SELECT * FROM Articles';
-    let query2 = `SELECT BlogSettings.author_id, Authors.author_name, 
+    let query2 = `SELECT BlogSettings.user_id, Users.user_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
-                  INNER JOIN Authors ON BlogSettings.author_id=Authors.author_id;`;
+                  INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
 
     db.all(query, function (errorArticles, rows) {
         db.all(query2, function (errBlog, settingsRow) {
@@ -55,7 +56,7 @@ router.post(
     insertionValidationSchema,
     validate,
     (req, res, next) => {
-        let query = `INSERT INTO Articles ("title", "subtitle", "contents", "author_id", "likes",
+        let query = `INSERT INTO Articles ("title", "subtitle", "contents", "user_id", "likes_count",
              "created_at_date", "modified_at_date", "publish_state")
              VALUES (?,?,?,?,?,?,?,?)`;
         let date = moment().format('MMMM Do YYYY, h:mm:ss a');
@@ -143,9 +144,9 @@ router.delete('/article/:id', (req, res, next) => {
 });
 
 router.get('/settings', (req, res, next) => {
-    let query = `SELECT BlogSettings.author_id, Authors.author_name, 
+    let query = `SELECT BlogSettings.user_id, Users.user_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
-                  INNER JOIN Authors ON BlogSettings.author_id=Authors.author_id;`;
+                  INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
 
     db.all(query, function (err, rows) {
         if (err) {
@@ -162,14 +163,14 @@ router.post(
     validate,
     (req, res, next) => {
         let query = `UPDATE BlogSettings SET blog_title = ?, blog_subtitle = ?;`;
-        let secondQuery = `UPDATE Authors SET author_name = ?`;
+        let secondQuery = `UPDATE Users SET user_name = ?`;
 
-        let { blog_title, blog_subtitle, author_name } = req.body;
+        let { blog_title, blog_subtitle, user_name } = req.body;
         db.all(
             query,
             [blog_title, blog_subtitle],
             function (errBlogSettings, rowBlogSettings) {
-                db.all(secondQuery, [author_name], function (errAuthor, authorRow) {
+                db.all(secondQuery, [user_name], function (errAuthor, authorRow) {
                     if (errBlogSettings) {
                         next(errBlogSettings);
                     }

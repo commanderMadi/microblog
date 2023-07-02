@@ -2,17 +2,16 @@ const express = require('express');
 const router = express.Router();
 const assert = require('assert');
 const passport = require('passport');
-const checkUserAuth = require('../middleware/checkUserAuth');
+const checkUserAuth = require('../middleware/checkLoggedIn');
 
 router.get('/', checkUserAuth, (req, res, next) => {
-    console.log(req);
     res.render('login.ejs');
 });
 
 router.post(
     '/',
     passport.authenticate('local', {
-        successRedirect: '/',
+        successReturnToOrRedirect: '/',
         failureRedirect: '/login',
         failureFlash: true,
     })
