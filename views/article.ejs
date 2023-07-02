@@ -5,5 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
     </head>
-    <body></body>
+    <body>
+        <h1>Article Title</h1>
+        <p><%=row.title%></p>
+
+        <h3>Article Subtitle</h3>
+        <p><%=row.subtitle%></p>
+
+        <h5>Article Body</h5>
+        <p><%=row.contents%></p>
+
+        <div>
+            <% commentsRows.forEach(comment => {%> <%console.log(comment)%>
+            <p><%=comment.comment_text%></p>
+            <%})%>
+        </div>
+
+        <form action="/article/" method="post">
+            <input hidden type="text" name="id" value="<%=row.article_id%>" />
+            <textarea name="comment" id="" cols="30" rows="10"></textarea>
+            <input type="submit" value="Add a Comment" />
+        </form>
+    </body>
 </html>
