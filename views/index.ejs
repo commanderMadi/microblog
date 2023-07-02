@@ -5,5 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
     </head>
-    <body></body>
+    <body>
+        <div class="blog_details">
+            <h1><%=settingsRow[0].blog_title%></h1>
+            <h2><%=settingsRow[0].blog_subtitle%></h2>
+            <h2><%=settingsRow[0].author_name%></h2>
+        </div>
+        <h1>Published Articles</h1>
+        <div class="published_articles_container">
+            <% rows.forEach(article => { %>
+            <p>Article Title: <%=article.title%></p>
+            <p>Date Published: <%=article.publish_date%></p>
+            <form action="/article/<%=article.article_id%>">
+                <input type="submit" value="Read More" />
+            </form>
+        </div>
+        <%}) %>
+    </body>
 </html>
