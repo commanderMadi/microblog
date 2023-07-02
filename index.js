@@ -27,7 +27,10 @@ app.use(
         // Should we resave our session variables if nothing has changes which we dont
         resave: false,
         // Save empty value if there is no vaue which we do not want to do
-        saveUninitialized: true,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 86400000,
+        },
     })
 );
 app.use(passport.initialize());
@@ -53,7 +56,7 @@ app.use('/login', loginRoutes);
 app.use('/dashboard', authorRoutes);
 app.use('/', readerRoutes);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 global.db = db;
 app.listen(port, () => {
