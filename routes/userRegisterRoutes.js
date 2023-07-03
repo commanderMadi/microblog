@@ -13,10 +13,11 @@ router.get('/', checkUserAuth, (req, res, next) => {
 router.post('/', registerValidationSchema, validate, async (req, res, next) => {
     let { username, email, password } = req.body;
     let userRole = 'Reader';
-    let query = `INSERT INTO Users ("user_name", "user_email", "user_password", "user_role")
+    let query = `SELECT * FROM Users WHERE user_email = ?`;
+
+    let secondQuery = `INSERT INTO Users ("user_name", "user_email", "user_password", "user_role")
                  VALUES(?,?,?,?)
     `;
-    let secondQuery = `SELECT * FROM Users WHERE user_email = ?`;
     // handle errors if any are sent via the validate middleware function
     let errors, hashedPassword;
     if (res.locals.result) {
@@ -27,7 +28,7 @@ router.post('/', registerValidationSchema, validate, async (req, res, next) => {
         hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    db.all(secondQuery, [email], function (err, rows) {
+    db.all(query, [email], function (err, rows) {
         if (err) {
             next(err);
         } else {
@@ -39,14 +40,18 @@ router.post('/', registerValidationSchema, validate, async (req, res, next) => {
         }
     });
 
-    db.all(query, [username, email, hashedPassword, userRole], function (err, rows) {
-        if (err) {
-            next(err);
-        } else {
-            req.flash('success_msg', 'You successfully registered!');
-            res.redirect('/login');
+    db.all(
+        secondQuery,
+        [username, email, hashedPassword, userRole],
+        function (err, rows) {
+            if (err) {
+                next(err);
+            } else {
+                req.flash('success_msg', 'You successfully registered!');
+                res.redirect('/login');
+            }
         }
-    });
+    );
 });
 
 module.exports = router;
