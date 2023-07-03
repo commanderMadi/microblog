@@ -10,22 +10,21 @@ function initialize(passport) {
             }
             if (rows.length > 0) {
                 const user = rows[0];
-                if (user.user_role !== 'Author') {
-                    bcrypt.compare(password, user.user_password, (err, matched) => {
-                        if (matched) {
-                            return done(null, user);
-                        }
-                    });
-                } else if (user.user_role === 'Author') {
-                    if (password === user.user_password) {
+                console.log(password, user.user_password);
+                bcrypt.compare(password, user.user_password, (err, matched) => {
+                    if (matched) {
                         return done(null, user);
                     } else {
+                        if (password === user.user_password) {
+                            return done(null, user);
+                        } else {
+                            return done(null, false, {
+                                message: 'Incorrect password. Try again!',
+                            });
+                        }
                         //password is incorrect
-                        return done(null, false, {
-                            message: 'Incorrect password. Try again!',
-                        });
                     }
-                }
+                });
             } else {
                 // No user found in DB
                 return done(null, false, {
