@@ -4,11 +4,13 @@ const assert = require('assert');
 const validate = require('../middleware/validate');
 const checkNotLoggedIn = require('../middleware/checkNotLoggedIn');
 const checkRole = require('../middleware/checkRole');
+const bcrypt = require('bcrypt');
 
 const insertionValidationSchema = require('../schemas/insertionValidationSchema');
 const updateValidationSchema = require('../schemas/updateValidationSchema');
 const updateSettingsValidationSchema = require('../schemas/updateSettingsValidationSchema');
 const { body } = require('express-validator');
+const changePasswordValidationSchema = require('../schemas/changePasswordValidationSchema');
 
 const router = express.Router();
 
@@ -182,6 +184,65 @@ router.post(
                 });
             }
         );
+    }
+);
+
+router.get('/change_password', (req, res, next) => {
+    res.render('changePassword.ejs');
+});
+
+router.post(
+    '/change_password',
+    changePasswordValidationSchema,
+    validate,
+    async (req, res, next) => {
+        let { old_password, new_password, confirm_new_password } = req.body;
+        let errors, hashedPassword;
+        let query = `SELECT * FROM Users WHERE user_id = ?`;
+        let secondQuery = `UPDATE Users SET user_password = ? WHERE user_id = ?`;
+        let { user_password, user_id } = req.user;
+        if (res.locals.result) {
+            errors = res.locals.result.errors;
+            res.render('changePassword.ejs', { errors });
+        }
+
+        db.all(query, [user_id], async function (err, rows) {
+            if (err) {
+                next(err);
+            } else {
+                if (rows.length > 0) {
+                    const isMatch = await bcrypt.compare(
+                        old_password,
+                        user_password
+                    );
+                    if (isMatch || old_password === user_password) {
+                        hashedPassword = await bcrypt.hash(new_password, 10);
+                        db.all(
+                            secondQuery,
+                            [hashedPassword, user_id],
+                            async function (err, rows) {
+                                if (err) {
+                                    next(err);
+                                } else {
+                                    req.flash(
+                                        'success_msg',
+                                        'Password successfully changed!'
+                                    );
+                                    res.redirect('/dashboard/change_password');
+                                }
+                            }
+                        );
+                    } else {
+                        req.flash('failure_msg', 'Current Password is wrong');
+                        res.redirect('/dashboard/change_password');
+                    }
+                } else {
+                    req.flash('failure_msg', 'No user found!');
+
+                    res.redirect('/dashboard/change_password');
+                }
+            }
+        });
     }
 );
 
