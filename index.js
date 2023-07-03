@@ -23,7 +23,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(
     session({
         // Key we want to keep secret which will encrypt all of our information
-        secret: process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET || 'WHEREISEVERYONEHIDING',
         // Should we resave our session variables if nothing has changes which we dont
         resave: false,
         // Save empty value if there is no vaue which we do not want to do
@@ -56,6 +56,9 @@ app.use('/dashboard', authorRoutes);
 app.use('/login', userLoginRoutes);
 app.use('/register', userRegisterRoutes);
 app.use('/', readerRoutes);
+app.get('*', (req, res) => {
+    res.status(404).sendFile(__dirname + '/public/html/404.html');
+});
 
 global.db = db;
 app.listen(port, () => {
