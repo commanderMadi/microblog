@@ -7,16 +7,16 @@
     </head>
     <body>
         <h1>Article Title</h1>
-        <p><%=row.title%></p>
+        <p><%=rows[0].title%></p>
 
         <h3>Article Subtitle</h3>
-        <p><%=row.subtitle%></p>
+        <p><%=rows[0].subtitle%></p>
 
         <h5>Article Body</h5>
-        <p><%=row.contents%></p>
+        <p><%=rows[0].contents%></p>
 
         <h6>Likes Count</h6>
-        <p><%=row.likes_count%></p>
+        <p><%=rows[0].likes_count%></p>
 
         <div>
             <% commentsRows.forEach(comment => {%>
@@ -26,26 +26,50 @@
 
         <% if (req.user) {%>
         <form action="/article/" method="post">
-            <input hidden type="text" name="id" value="<%=row.article_id%>" />
+            <input hidden type="text" name="id" value="<%=rows[0].article_id%>" />
             <textarea name="comment" id="" cols="30" rows="10"></textarea>
             <input type="submit" value="Add a Comment" />
         </form>
-        <form action="/article/interact" method="post">
-            <input hidden type="text" name="articleID" value="<%=row.article_id%>" />
+
+        <%if (likesRows.length >= 0) { console.log(likesRows);%> <% var filteredData
+        = likesRows.filter(likeRow => likeRow.user_id === req.user.user_id); %> <%if
+        (filteredData.length > 0) { console.log(req.user);%>
+        <form action="/article/remove_interaction/" method="post">
+            <input
+                hidden
+                type="text"
+                name="articleID"
+                value="<%=rows[0].article_id%>"
+            />
             <input
                 hidden
                 type="text"
                 name="likesCount"
-                value="<%=row.likes_count%>"
+                value="<%=rows[0].likes_count%>"
+            />
+            <input type="submit" value="Unlike" />
+        </form>
+        <%} else {%>
+        <form action="/article/interact/" method="post">
+            <input
+                hidden
+                type="text"
+                name="articleID"
+                value="<%=rows[0].article_id%>"
+            />
+            <input
+                hidden
+                type="text"
+                name="likesCount"
+                value="<%=rows[0].likes_count%>"
             />
             <input type="submit" value="Like" />
         </form>
-        <%} else {%>
+        <%}}} else {%>
         <h3>
             <a href="/login">Sign in</a> to add a comment or to interact with the
             article!
         </h3>
-
         <%}%>
     </body>
 </html>

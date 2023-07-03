@@ -27,17 +27,29 @@ router.get('/', (req, res, next) => {
 router.get('/article/:id', (req, res, next) => {
     let query = 'SELECT * FROM Articles WHERE article_id = ? ;';
     let secondQuery = 'SELECT * FROM Comments WHERE article_id = ?';
-    let id = req.params.id;
-    db.get(query, [id], function (err, row) {
-        db.all(secondQuery, [id], function (commentsErr, commentsRows) {
-            if (err) {
-                next(err);
-            }
-            if (commentsErr) {
-                next(commentsErr);
-            } else {
-                res.render('article.ejs', { req, row, commentsRows });
-            }
+    let thirdQuery = 'SELECT * FROM Likes WHERE article_id = ?';
+    let articleID = req.params.id;
+    db.all(query, [articleID], function (err, rows) {
+        db.all(secondQuery, [articleID], function (commentsErr, commentsRows) {
+            db.all(thirdQuery, [articleID], function (likesError, likesRows) {
+                if (err) {
+                    next(err);
+                }
+                if (commentsErr) {
+                    next(commentsErr);
+                }
+                if (likesError) {
+                    next(likesError);
+                } else {
+                    console.log(likesRows);
+                    res.render('article.ejs', {
+                        req,
+                        rows,
+                        likesRows,
+                        commentsRows,
+                    });
+                }
+            });
         });
     });
 });
@@ -47,10 +59,9 @@ router.post('/article', (req, res, next) => {
                 VALUES (?,?,?,?)`;
     let { comment, id } = req.body;
     let commentAuthor = req.user.user_name;
-    let userId = req.user.user_id;
-    let numericID = parseInt(id);
+    let userID = req.user.user_id;
 
-    db.get(query, [numericID, comment, commentAuthor, userId], function (err, row) {
+    db.get(query, [id, comment, commentAuthor, userID], function (err, row) {
         if (err) {
             next(err);
         } else {
@@ -64,12 +75,12 @@ router.post('/article/interact', (req, res, next) => {
                 VALUES (?,?)`;
     let secondQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
     let { articleID, likesCount } = req.body;
-    let userId = req.user.user_id;
+    let userID = req.user.user_id;
     let numericID = parseInt(articleID);
     let numericLikeCount = parseInt(likesCount);
     numericLikeCount++;
 
-    db.all(query, [userId, numericID], function (err, row) {
+    db.all(query, [userID, numericID], function (err, row) {
         db.all(
             secondQuery,
             [numericLikeCount, numericID],
@@ -84,6 +95,36 @@ router.post('/article/interact', (req, res, next) => {
                 }
             }
         );
+    });
+});
+
+router.post('/article/remove_interaction', (req, res, next) => {
+    let query = `DELETE FROM Likes WHERE "user_id" = ?`;
+    let secondQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
+    let { articleID, likesCount } = req.body;
+    let userID = req.user.user_id;
+    let numericLikeCount = parseInt(likesCount);
+    numericLikeCount--;
+
+    db.all(query, [userID], function (err, row) {
+        if (parseInt(likesCount) > 0) {
+            db.all(
+                secondQuery,
+                [numericLikeCount, articleID],
+                function (errTwo, rowsTwo) {
+                    if (err) {
+                        next(err);
+                    }
+                    if (errTwo) {
+                        next(errTwo);
+                    } else {
+                        res.redirect(`/article/${articleID}`);
+                    }
+                }
+            );
+        } else {
+            res.redirect(`/article/${articleID}`);
+        }
     });
 });
 
