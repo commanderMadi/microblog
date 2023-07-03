@@ -6,21 +6,28 @@ const assert = require('assert');
 router.get('/', (req, res, next) => {
     let query =
         'SELECT * FROM Articles WHERE publish_state = "Published" ORDER BY publish_date DESC';
-    let query2 = `SELECT BlogSettings.user_id, Users.user_name, 
+    let secondQuery = `SELECT BlogSettings.user_id, Users.user_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
                   INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
 
     db.all(query, function (errorArticles, rows) {
-        db.all(query2, function (errBlog, settingsRow) {
+        db.all(secondQuery, function (errBlog, settingsRow) {
+            let authorFirstTimeLogin;
             if (errorArticles) {
                 next(errorArticles);
             }
             if (errBlog) {
                 next(errBlog);
             } else {
+                if (req.user && req.user.user_role === 'Author') {
+                    let { user_password } = req.user;
+                    authorFirstTimeLogin =
+                        user_password === process.env.FIRST_TIME_LOGIN_PASSWORD ||
+                        user_password === 'admintest123';
+                    console.log(authorFirstTimeLogin);
+                }
                 res.render('index.ejs', {
-                    message:
-                        'First time login password is very unsecure. Proceed to change the password ASAP',
+                    authorFirstTimeLogin,
                     rows,
                     settingsRow,
                     req,
@@ -64,6 +71,7 @@ router.post('/article', (req, res, next) => {
     let query = `INSERT INTO Comments ("article_id", "comment_text", "comment_author", "user_id")
                 VALUES (?,?,?,?)`;
     let { comment, id } = req.body;
+    console.log(req.user);
     let commentAuthor = req.user.user_name;
     let userID = req.user.user_id;
 

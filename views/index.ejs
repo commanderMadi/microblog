@@ -16,8 +16,11 @@
         <% if (req.user && req.user.user_role === "Author") {%>
         <h2><a href="/dashboard">Dashboard</a></h2>
         <%}%> <% if (req.user && req.user.user_role === "Author" &&
-        req.user.user_password === "admintest123") {%>
-        <h2><%=message%></h2>
+        authorFirstTimeLogin) {%>
+        <h1>
+            'First time login password is very unsecure. Proceed to change the
+            password ASAP'
+        </h1>
         <h2><a href="/dashboard/change_password">Change Password</a></h2>
         <%}%>
 
