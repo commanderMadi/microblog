@@ -20,7 +20,7 @@
 
         <div>
             <% commentsRows.forEach(comment => {%>
-            <p><%=comment.comment_text%></p>
+            <p><%=comment.comment_author%>:<%=comment.comment_text%></p>
             <%})%>
         </div>
 
