@@ -3,7 +3,7 @@ const router = express.Router();
 const assert = require('assert');
 const bcrypt = require('bcrypt');
 const checkUserAuth = require('../middleware/checkLoggedIn');
-const registerValidationSchema = require('../controllers/registerValidationSchema');
+const registerValidationSchema = require('../schemas/registerValidationSchema');
 const validate = require('../middleware/validate');
 
 router.get('/', checkUserAuth, (req, res, next) => {

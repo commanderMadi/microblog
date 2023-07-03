@@ -5,9 +5,9 @@ const validate = require('../middleware/validate');
 const checkNotLoggedIn = require('../middleware/checkNotLoggedIn');
 const checkRole = require('../middleware/checkRole');
 
-const insertionValidationSchema = require('../controllers/insertionValidationSchema');
-const updateValidationSchema = require('../controllers/updateValidationSchema');
-const updateSettingsValidationSchema = require('../controllers/updateSettingsValidationSchema');
+const insertionValidationSchema = require('../schemas/insertionValidationSchema');
+const updateValidationSchema = require('../schemas/updateValidationSchema');
+const updateSettingsValidationSchema = require('../schemas/updateSettingsValidationSchema');
 const { body } = require('express-validator');
 
 const router = express.Router();
