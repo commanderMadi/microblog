@@ -18,7 +18,13 @@ router.get('/', (req, res, next) => {
             if (errBlog) {
                 next(errBlog);
             } else {
-                res.render('index.ejs', { rows, settingsRow, req });
+                res.render('index.ejs', {
+                    message:
+                        'First time login password is very unsecure. Proceed to change the password ASAP',
+                    rows,
+                    settingsRow,
+                    req,
+                });
             }
         });
     });
