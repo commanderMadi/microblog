@@ -12,6 +12,10 @@
             <h2><%=settingsRow[0].author_name%></h2>
         </div>
         <h1>Published Articles</h1>
+        <% if (req.user && req.user.user_role === "Author") {%>
+        <h2><a href="/dashboard">Dashboard</a></h2>
+        <%}%>
+
         <div class="published_articles_container">
             <% rows.forEach(article => { %>
             <p>Article Title: <%=article.title%></p>
