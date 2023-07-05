@@ -203,7 +203,7 @@ router.post(
         let { user_password, user_id } = req.user;
         if (res.locals.result) {
             errors = res.locals.result.errors;
-            res.render('changePassword.ejs', { errors });
+            return res.render('changePassword.ejs', { errors });
         }
 
         db.all(query, [user_id], async function (err, rows) {
