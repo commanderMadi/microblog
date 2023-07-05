@@ -41,27 +41,35 @@ router.get('/article/:id', (req, res, next) => {
     let query = 'SELECT * FROM Articles WHERE article_id = ? ;';
     let secondQuery = 'SELECT * FROM Comments WHERE article_id = ?';
     let thirdQuery = 'SELECT * FROM Likes WHERE article_id = ?';
+    let fourthQuery = `SELECT BlogSettings.user_id, Users.user_name, 
+                  BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
+                  INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
     let articleID = req.params.id;
     db.all(query, [articleID], function (err, rows) {
         db.all(secondQuery, [articleID], function (commentsErr, commentsRows) {
             db.all(thirdQuery, [articleID], function (likesError, likesRows) {
-                if (err) {
-                    next(err);
-                }
-                if (commentsErr) {
-                    next(commentsErr);
-                }
-                if (likesError) {
-                    next(likesError);
-                } else {
-                    console.log(likesRows);
-                    res.render('article.ejs', {
-                        req,
-                        rows,
-                        likesRows,
-                        commentsRows,
-                    });
-                }
+                db.all(fourthQuery, function (settingsError, settingsRow) {
+                    if (err) {
+                        next(err);
+                    }
+                    if (commentsErr) {
+                        next(commentsErr);
+                    }
+                    if (likesError) {
+                        next(likesError);
+                    }
+                    if (settingsError) {
+                        next(settingsError);
+                    } else {
+                        res.render('article.ejs', {
+                            req,
+                            rows,
+                            likesRows,
+                            commentsRows,
+                            settingsRow,
+                        });
+                    }
+                });
             });
         });
     });
@@ -105,7 +113,7 @@ router.post('/article/interact', (req, res, next) => {
                 if (errTwo) {
                     next(errTwo);
                 } else {
-                    res.redirect(`/article/${articleID}`);
+                    res.redirect(`/article/${articleID}#interactions-container`);
                 }
             }
         );
@@ -132,7 +140,7 @@ router.post('/article/remove_interaction', (req, res, next) => {
                     if (errTwo) {
                         next(errTwo);
                     } else {
-                        res.redirect(`/article/${articleID}`);
+                        res.redirect(`/article/${articleID}#interactions-container`);
                     }
                 }
             );
