@@ -42,7 +42,7 @@ router.put('/article/:id', (req, res, next) => {
     let query =
         'UPDATE Articles SET publish_state = "Published", publish_date = ? WHERE article_id = ?';
     let articletoUpdate = req.params.id;
-    let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+    let date = moment().format('MMMM Do YYYY, h:mm a');
 
     db.all(query, [date, articletoUpdate], function (err, rows) {
         if (err) {
@@ -61,7 +61,7 @@ router.post(
         let query = `INSERT INTO Articles ("title", "subtitle", "contents", "user_id", "likes_count",
              "created_at_date", "modified_at_date", "publish_state")
              VALUES (?,?,?,?,?,?,?,?)`;
-        let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+        let date = moment().format('MMMM Do YYYY, h:mm a');
 
         let values = [
             req.body.title,
@@ -107,7 +107,7 @@ router.put(
         let secondQuery = 'SELECT * FROM Articles WHERE article_id = ?';
         let articletoUpdate = req.params.id;
         let { title, subtitle, contents } = req.body;
-        let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+        let date = moment().format('MMMM Do YYYY, h:mm a');
         db.all(
             query,
             [title, subtitle, contents, date, articletoUpdate],
@@ -208,6 +208,7 @@ router.post(
 
         db.all(query, [user_id], async function (err, rows) {
             if (err) {
+                console.log(err);
                 next(err);
             } else {
                 if (rows.length > 0) {
@@ -222,6 +223,7 @@ router.post(
                             [hashedPassword, user_id],
                             async function (err, rows) {
                                 if (err) {
+                                    console.log(err)
                                     next(err);
                                 } else {
                                     req.flash(
@@ -238,7 +240,6 @@ router.post(
                     }
                 } else {
                     req.flash('failure_msg', 'No user found!');
-
                     res.redirect('/dashboard/change_password');
                 }
             }
