@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+
         <link rel="stylesheet" href="../styles/styles.css" type="text/css" />
         <title>Document</title>
     </head>
@@ -49,8 +51,8 @@
                     <time><%=rows[0].publish_date%></time>
                 </span>
                 <span class="border-separate text-gray-400">|</span>
-                <span id="total-likes" class="text-xs text-gray-400">
-                    Likes: <%=rows[0].likes_count%>
+                <span class="text-xs text-gray-400">
+                    Likes: <span id="total-likes"><%=rows[0].likes_count%></span>
                 </span>
             </header>
             <div class="container article-contents-container">
@@ -65,30 +67,9 @@
             id="interactions-container"
             class="container w-6/12 bg-slate-300 p-4 mx-auto"
         >
-            <%if (req.user && likesRows.length >= 0) {%> <% var filteredData =
-            likesRows.filter(likeRow => likeRow.user_id === req.user.user_id); %>
-            <%if (filteredData.length > 0) {%>
-            <form action="/article/remove_interaction/" method="post">
-                <input
-                    hidden
-                    type="text"
-                    name="articleID"
-                    value="<%=rows[0].article_id%>"
-                />
-                <input
-                    hidden
-                    type="text"
-                    name="likesCount"
-                    value="<%=rows[0].likes_count%>"
-                />
-                <input
-                    class="p-1 mt-1 w-16 border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
-                    type="submit"
-                    value="Unlike"
-                />
-            </form>
-            <%} else {%>
-            <form id="likes-interact" action="/article/interact/" method="post">
+            <%if (req.user) {%>
+
+            <form id="likes-interact-form" action="/article/interact/" method="post">
                 <input
                     hidden
                     type="text"
@@ -96,26 +77,21 @@
                     name="articleID"
                     value="<%=rows[0].article_id%>"
                 />
-                <input
-                    hidden
-                    id="likes-count-interact"
-                    type="text"
-                    name="likesCount"
-                    value="<%=rows[0].likes_count%>"
-                />
-                <input
-                    class="p-1 mt-1 w-16 border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
-                    type="submit"
-                    value="Like"
-                />
+
+                <%var filteredData = likesRows.filter(row => req.user.user_id ===
+                row.user_id) %> <input id="submit-btn" class="p-1 mt-1 w-16
+                border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
+                type="submit" value="<%=filteredData.length > 0 ? "Unlike" :
+                "Like"%>" />
             </form>
-            <%}}%>
+            <% }%>
         </div>
         <div
-            class="comments-container mt-10 mb-8 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
+            id="comments-container"
+            class="mt-10 mb-8 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
         >
             <% commentsRows.forEach(comment => {%>
-            <p><%=comment.comment_author%>:<%=comment.comment_text%></p>
+            <p><%=comment.comment_author%>: <%=comment.comment_text%></p>
             <%})%>
         </div>
         <div
@@ -123,17 +99,19 @@
         >
             <% if (req.user) {%>
             <form
+                id="add-comment-form"
                 class="flex flex-col w-full flex-wrap"
-                action="/article/"
+                action="/article/comment"
                 method="post"
             >
                 <input
                     hidden
                     type="text"
-                    name="id"
+                    id="comment-article-id"
                     value="<%=rows[0].article_id%>"
                 />
                 <textarea
+                    id="comment-area"
                     class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
                     name="comment"
                     required
@@ -156,5 +134,7 @@
             to add a comment or to interact with the article!
         </h3>
         <%}%>
+        <script src="../js/interactions.js"></script>
+        <script src="../js/comments.js"></script>
     </body>
 </html>
