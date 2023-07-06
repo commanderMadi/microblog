@@ -1,92 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/styles.css" />
         <title>Document</title>
     </head>
 
     <body>
         <header>
-            <div class='w-screen bg-indigo-900 p-5 flex justify-between'>
-                <div class='flex text-white'>
-                    <h1 class='self-center'>
-                        <%=settingsRow[0].blog_title%>
+            <div class="w-screen bg-indigo-900 p-5 flex justify-between">
+                <div class="flex text-white">
+                    <h1 class="self-center">
+                        <a href="/"><%=settingsRow[0].blog_title%></a>
                     </h1>
                 </div>
-                <div class='text-white'>
-                    <h2>
-                        <%=settingsRow[0].blog_subtitle%>
-                    </h2>
-                    <h3 class='text-right'>
-                        By: <%=settingsRow[0].user_name%>
-                    </h3>
+                <div class="text-white">
+                    <h2><%=settingsRow[0].blog_subtitle%></h2>
+                    <h3 class="text-right">By: <%=settingsRow[0].user_name%></h3>
                 </div>
             </div>
-            <div class='w-screen bg-indigo-950 p-5 align-middle'>
-                <div class='flex justify-between text-white'>
+            <div class="w-screen bg-indigo-950 p-5 align-middle">
+                <div class="flex justify-between text-white">
                     <% if (req.user) {%>
-                        <h3>Hello <%=req.user.user_name%>
-                        </h3>
-                        <div class='flex sign-out'>
-                            <% if (req.user.user_role==="Author" ) { %>
-                                <a class='text-right mr-5' href="/dashboard">Dashboard</a>
-                                <%} %>
-                                    <a class='text-white' href="/logout/">Log out</a>
-                        </div>
-                        <%} else {%>
-                            <div class='flex w-full sign-in justify-end'>
-                                <a class='text-right' href="/login/">Sign In</a>
-                            </div>
+                    <h3>Hello <%=req.user.user_name%></h3>
+                    <div class="flex sign-out">
+                        <% if (req.user.user_role==="Author" ) { %>
+                        <a class="text-right mr-5" href="/dashboard">Dashboard</a>
+                        <%} %>
+                        <a class="text-white" href="/logout/">Log out</a>
+                    </div>
+                    <%} else {%>
+                    <div class="flex w-full sign-in justify-end">
+                        <a class="text-right" href="/login/">Sign In</a>
+                    </div>
 
-                            <%}%>
+                    <%}%>
                 </div>
-
             </div>
         </header>
-        <main class='wrapper'>
-            <% if (req.user && req.user.user_role==="Author" && authorFirstTimeLogin) {%>
-                <div class='pw-change-alert bg-red-500 border-r-red-700 p-3'>
-                    <p class='text-white'>First time login password is very unsecure. Proceed to <a
-                            href="/dashboard/change_password">change your password</a> immediately</p>
+        <main class="wrapper">
+            <% if (req.user && req.user.user_role==="Author" && authorFirstTimeLogin)
+            {%>
+            <div class="pw-change-alert bg-red-500 border-r-red-700 p-3">
+                <p class="text-white">
+                    First time login password is very unsecure. Proceed to
+                    <a href="/dashboard/change_password">change your password</a>
+                    immediately
+                </p>
+            </div>
+            <%}%>
+            <section class="published-articles-section">
+                <h1 class="mt-10 mb-5 ml-3 published-articles-title text-4xl">
+                    Published Articles
+                </h1>
+                <div
+                    class="mx-auto container published-articles-container content-center align-items-center grid grid-rows-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                >
+                    <% rows.forEach((article,i)=> { if( i === 0) {%>
+                    <div
+                        class="flex flex-col justify-end m-3 article-container border shadow border-stone-400 text-center"
+                    >
+                        <img
+                            class="mx-auto"
+                            src="images/article_icon.png"
+                            alt="Article icon"
+                            width="200"
+                            height="200"
+                        />
+                        <span class="text-emerald-700">Latest!</span>
+                        <h3><%=article.title%></h3>
+                        <span><%=article.publish_date%></span>
+                        <form action="/article/<%=article.article_id%>">
+                            <input
+                                class="hover:bg-indigo-800 mt-4 p-4 shadow cursor-pointer text-white bg-red-700 w-full"
+                                type="submit"
+                                value="Read More"
+                            />
+                        </form>
+                    </div>
+                    <%} else {%>
+                    <div
+                        class="flex flex-col justify-end m-3 article-container border shadow border-stone-400 text-center"
+                    >
+                        <img
+                            class="mx-auto"
+                            src="images/article_icon.png"
+                            alt="Article icon"
+                            width="200"
+                            height="200"
+                        />
+                        <h3><%=article.title%></h3>
+                        <span><%=article.publish_date%></span>
+                        <form action="/article/<%=article.article_id%>">
+                            <input
+                                class="hover:bg-indigo-800 mt-4 p-4 shadow cursor-pointer text-white bg-red-700 w-full"
+                                type="submit"
+                                value="Read More"
+                            />
+                        </form>
+                    </div>
+                    <%}%> <%}) %>
                 </div>
-                <%}%>
-                    <section class='published-articles-section'>
-                        <h1 class='mt-10 mb-5 ml-3 published-articles-title text-4xl'>Published Articles</h1>
-                        <div
-                            class='mx-auto container published-articles-container content-center align-items-center grid grid-rows-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                            <% rows.forEach(article=> { %>
-                                <div
-                                    class="p-5 m-3 article-container border shadow border-stone-400 text-center flex-col">
-                                    <img class='mx-auto' src="images/article_icon.png" alt="Article icon" width='128'
-                                        height='128'>
-                                    <p>
-                                        <%=article.title%>
-                                    </p>
-                                    <p>
-                                        <%=article.publish_date%>
-                                    </p>
-                                    <form class='' action="/article/<%=article.article_id%>">
-                                        <input
-                                            class='hover:bg-indigo-800 mt-4 p-4 shadow cursor-pointer text-white bg-red-700 min-w-full'
-                                            type="submit" value="Read More" />
-                                    </form>
-                                </div>
-                                <%}) %>
-                        </div>
-
-                    </section>
+            </section>
         </main>
-
-
-
-
-
-        <div class="published_articles_container">
-
-
     </body>
-
 </html>

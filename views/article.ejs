@@ -3,72 +3,157 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../styles/styles.css" type="text/css" />
         <title>Document</title>
     </head>
     <body>
-        <h1>Article Title</h1>
-        <p><%=rows[0].title%></p>
+        <header>
+            <div class="w-screen bg-indigo-900 p-5 flex justify-between">
+                <div class="flex text-white">
+                    <h1 class="self-center">
+                        <a href="/"><%=settingsRow[0].blog_title%></a>
+                    </h1>
+                </div>
+                <div class="text-white">
+                    <h2><%=settingsRow[0].blog_subtitle%></h2>
+                    <h3 class="text-right">By: <%=settingsRow[0].user_name%></h3>
+                </div>
+            </div>
+            <div class="w-screen bg-indigo-950 p-5 align-middle">
+                <div class="flex justify-between text-white">
+                    <% if (req.user) {%>
+                    <h3>Hello <%=req.user.user_name%></h3>
+                    <div class="flex sign-out">
+                        <% if (req.user.user_role==="Author" ) { %>
+                        <a class="text-right mr-5" href="/dashboard">Dashboard</a>
+                        <%} %>
+                        <a class="text-white" href="/logout/">Log out</a>
+                    </div>
+                    <%} else {%>
+                    <div class="flex w-full sign-in justify-end">
+                        <a class="text-right" href="/login/">Sign In</a>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+        </header>
 
-        <h3>Article Subtitle</h3>
-        <p><%=rows[0].subtitle%></p>
-
-        <h5>Article Body</h5>
-        <p><%=rows[0].contents%></p>
-
-        <h6>Likes Count</h6>
-        <p><%=rows[0].likes_count%></p>
-
-        <div>
+        <article
+            id="article-main-container"
+            class="mt-10 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
+        >
+            <header class="article-information mt-10">
+                <h1 class="mb-3 text-5xl"><%=rows[0].title%></h1>
+                <h2 class="ml-2 text-xl"><%=rows[0].subtitle%></h2>
+                <span class="ml-2 text-xs text-gray-400">
+                    <time><%=rows[0].publish_date%></time>
+                </span>
+                <span class="border-separate text-gray-400">|</span>
+                <span id="total-likes" class="text-xs text-gray-400">
+                    Likes: <%=rows[0].likes_count%>
+                </span>
+            </header>
+            <div class="container article-contents-container">
+                <p
+                    class="leading-8 p-3 tracking-wide ml-2 mt-8 text-base article-contents"
+                >
+                    <%=rows[0].contents%>
+                </p>
+            </div>
+        </article>
+        <div
+            id="interactions-container"
+            class="container w-6/12 bg-slate-300 p-4 mx-auto"
+        >
+            <%if (req.user && likesRows.length >= 0) {%> <% var filteredData =
+            likesRows.filter(likeRow => likeRow.user_id === req.user.user_id); %>
+            <%if (filteredData.length > 0) {%>
+            <form action="/article/remove_interaction/" method="post">
+                <input
+                    hidden
+                    type="text"
+                    name="articleID"
+                    value="<%=rows[0].article_id%>"
+                />
+                <input
+                    hidden
+                    type="text"
+                    name="likesCount"
+                    value="<%=rows[0].likes_count%>"
+                />
+                <input
+                    class="p-1 mt-1 w-16 border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
+                    type="submit"
+                    value="Unlike"
+                />
+            </form>
+            <%} else {%>
+            <form id="likes-interact" action="/article/interact/" method="post">
+                <input
+                    hidden
+                    type="text"
+                    id="article-id-interact"
+                    name="articleID"
+                    value="<%=rows[0].article_id%>"
+                />
+                <input
+                    hidden
+                    id="likes-count-interact"
+                    type="text"
+                    name="likesCount"
+                    value="<%=rows[0].likes_count%>"
+                />
+                <input
+                    class="p-1 mt-1 w-16 border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
+                    type="submit"
+                    value="Like"
+                />
+            </form>
+            <%}}%>
+        </div>
+        <div
+            class="comments-container mt-10 mb-8 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
+        >
             <% commentsRows.forEach(comment => {%>
             <p><%=comment.comment_author%>:<%=comment.comment_text%></p>
             <%})%>
         </div>
+        <div
+            class="article-interactions-container flex container w-6/12 mt-4 mx-auto"
+        >
+            <% if (req.user) {%>
+            <form
+                class="flex flex-col w-full flex-wrap"
+                action="/article/"
+                method="post"
+            >
+                <input
+                    hidden
+                    type="text"
+                    name="id"
+                    value="<%=rows[0].article_id%>"
+                />
+                <textarea
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    name="comment"
+                    required
+                    cols="30"
+                    rows="10"
+                ></textarea>
+                <input
+                    class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-indigo-800 rounded-md self-end"
+                    type="submit"
+                    value="Add a Comment"
+                />
+            </form>
+        </div>
 
-        <% if (req.user) {%>
-        <form action="/article/" method="post">
-            <input hidden type="text" name="id" value="<%=rows[0].article_id%>" />
-            <textarea name="comment" id="" cols="30" rows="10"></textarea>
-            <input type="submit" value="Add a Comment" />
-        </form>
-
-        <%if (likesRows.length >= 0) { console.log(likesRows);%> <% var filteredData
-        = likesRows.filter(likeRow => likeRow.user_id === req.user.user_id); %> <%if
-        (filteredData.length > 0) { console.log(req.user);%>
-        <form action="/article/remove_interaction/" method="post">
-            <input
-                hidden
-                type="text"
-                name="articleID"
-                value="<%=rows[0].article_id%>"
-            />
-            <input
-                hidden
-                type="text"
-                name="likesCount"
-                value="<%=rows[0].likes_count%>"
-            />
-            <input type="submit" value="Unlike" />
-        </form>
         <%} else {%>
-        <form action="/article/interact/" method="post">
-            <input
-                hidden
-                type="text"
-                name="articleID"
-                value="<%=rows[0].article_id%>"
-            />
-            <input
-                hidden
-                type="text"
-                name="likesCount"
-                value="<%=rows[0].likes_count%>"
-            />
-            <input type="submit" value="Like" />
-        </form>
-        <%}}} else {%>
-        <h3>
-            <a href="/login">Sign in</a> to add a comment or to interact with the
-            article!
+        <h3 class="text-red-700">
+            <a class="text-indigo-950 hover:text-emerald-950" href="/login"
+                >Sign in</a
+            >
+            to add a comment or to interact with the article!
         </h3>
         <%}%>
     </body>

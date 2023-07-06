@@ -113,7 +113,7 @@ router.post('/article/interact', (req, res, next) => {
                 if (errTwo) {
                     next(errTwo);
                 } else {
-                    res.redirect(`/article/${articleID}#interactions-container`);
+                    res.redirect(`/article/${articleID}#article-main-container`);
                 }
             }
         );
@@ -140,7 +140,7 @@ router.post('/article/remove_interaction', (req, res, next) => {
                     if (errTwo) {
                         next(errTwo);
                     } else {
-                        res.redirect(`/article/${articleID}#interactions-container`);
+                        res.redirect(`/article/${articleID}#article-main-container`);
                     }
                 }
             );

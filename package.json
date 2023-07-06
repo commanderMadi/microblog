@@ -13,6 +13,8 @@
     "author": "Simon Katan",
     "license": "ISC",
     "dependencies": {
+        "@tailwindcss/forms": "^0.5.3",
+        "axios": "^1.4.0",
         "bcrypt": "^5.1.0",
         "dotenv": "^16.3.1",
         "ejs": "^3.1.8",
@@ -25,7 +27,8 @@
         "nodemon": "^2.0.22",
         "passport": "^0.6.0",
         "passport-local": "^1.0.0",
-        "sqlite3": "^5.1.2"
+        "sqlite3": "^5.1.2",
+        "tailwindcss": "^3.3.2"
     },
     "engines": {
         "npm": ">=8.0.0",
