@@ -6,5 +6,5 @@ module.exports = {
             roboto: ['Roboto', 'Arial', 'sans-serif'],
         },
     },
-    plugins: [require('@tailwindcss/forms')],
+    plugins: [],
 };
