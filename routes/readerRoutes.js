@@ -75,79 +75,74 @@ router.get('/article/:id', (req, res, next) => {
     });
 });
 
-router.post('/article', (req, res, next) => {
+router.post('/article/comment', (req, res, next) => {
     let query = `INSERT INTO Comments ("article_id", "comment_text", "comment_author", "user_id")
                 VALUES (?,?,?,?)`;
-    let { comment, id } = req.body;
-    console.log(req.user);
+    let { comment, articleID } = req.body;
     let commentAuthor = req.user.user_name;
     let userID = req.user.user_id;
 
-    db.get(query, [id, comment, commentAuthor, userID], function (err, row) {
+    db.all(query, [articleID, comment, commentAuthor, userID], function (err, row) {
         if (err) {
             next(err);
         } else {
-            res.redirect(`/article/${id}`);
+            console.log('ok!');
+            res.send({ comment, commentAuthor });
         }
     });
 });
 
 router.post('/article/interact', (req, res, next) => {
-    let query = `INSERT INTO Likes ("user_id", "article_id")
+    let updateQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
+    let insertQuery = `INSERT INTO Likes ("user_id", "article_id")
                 VALUES (?,?)`;
-    let secondQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
-    let { articleID, likesCount } = req.body;
+    let deleteQuery = `DELETE FROM Likes WHERE user_id = ?`;
+    let { articleID, likesCount, operation } = req.body;
+    console.log(operation);
     let userID = req.user.user_id;
     let numericID = parseInt(articleID);
     let numericLikeCount = parseInt(likesCount);
-    numericLikeCount++;
+    let likesCountAfterInteraction = numericLikeCount;
 
-    db.all(query, [userID, numericID], function (err, row) {
-        db.all(
-            secondQuery,
-            [numericLikeCount, numericID],
-            function (errTwo, rowsTwo) {
+    switch (operation) {
+        case 'Like':
+            console.log('like run');
+            likesCountAfterInteraction++;
+            db.all(insertQuery, [userID, articleID], function (err, rows) {
                 if (err) {
                     next(err);
-                }
-                if (errTwo) {
-                    next(errTwo);
                 } else {
-                    res.redirect(`/article/${articleID}#article-main-container`);
+                    console.log('done!');
+                    res.send({
+                        numericLikeCount: likesCountAfterInteraction,
+                    });
                 }
+            });
+            break;
+        case 'Unlike':
+            console.log('unlike run');
+            likesCountAfterInteraction--;
+            db.all(deleteQuery, [userID], function (err, rows) {
+                if (err) {
+                    next(err);
+                } else {
+                    res.send({
+                        numericLikeCount: likesCountAfterInteraction,
+                    });
+                }
+            });
+            break;
+    }
+    db.all(
+        updateQuery,
+        [likesCountAfterInteraction, articleID],
+        function (err, rows) {
+            console.log('do I even run!');
+            if (err) {
+                next(err);
             }
-        );
-    });
-});
-
-router.post('/article/remove_interaction', (req, res, next) => {
-    let query = `DELETE FROM Likes WHERE "user_id" = ?`;
-    let secondQuery = `UPDATE Articles SET "likes_count" = ? WHERE article_id = ?`;
-    let { articleID, likesCount } = req.body;
-    let userID = req.user.user_id;
-    let numericLikeCount = parseInt(likesCount);
-    numericLikeCount--;
-
-    db.all(query, [userID], function (err, row) {
-        if (parseInt(likesCount) > 0) {
-            db.all(
-                secondQuery,
-                [numericLikeCount, articleID],
-                function (errTwo, rowsTwo) {
-                    if (err) {
-                        next(err);
-                    }
-                    if (errTwo) {
-                        next(errTwo);
-                    } else {
-                        res.redirect(`/article/${articleID}#article-main-container`);
-                    }
-                }
-            );
-        } else {
-            res.redirect(`/article/${articleID}`);
         }
-    });
+    );
 });
 
 router.get('/logout', (req, res, next) => {
