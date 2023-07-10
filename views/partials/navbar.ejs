@@ -1,3 +1,4 @@
+<!--Add code to display the navbar and then reuse it in all other templates-->
 <header>
     <div class="w-screen bg-indigo-900 p-5 flex justify-between">
         <div class="flex text-white">
@@ -12,6 +13,7 @@
     </div>
     <div class="w-screen bg-indigo-950 p-5 align-middle">
         <div class="flex justify-between text-white">
+            <!-- Display different links based on whether the user is authenticated or not-->
             <% if (req.user) {%>
             <h3>Hello <%=req.user.user_name%></h3>
             <div class="flex">
