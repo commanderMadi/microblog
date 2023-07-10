@@ -7,14 +7,19 @@
         <title><%=settingsRow[0].blog_title%> | <%=articleRow.title%> - Edit Article</title>
     </head>
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <div class="container w-6/12 mx-auto mt-10 flex flex-col">
+            <!--Page main heading element-->
             <h1 class="text-4xl my-10 w-6/12">Edit Article</h1>
+
+            <!--Express Flash Messages-->
             <% if(messages.success) { %>
             <p class="text-indigo-800"><%= messages.success %></p>
             <%}%>
-            <!--Express Flash Messages-->
+
+            <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>

@@ -23,10 +23,12 @@
             <% if(messages.success_msg) { %>
             <p class="text-indigo-800 mt-4"><%= messages.success_msg %></p>
             <%}%>
+
             <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
+
             <!--In the settings page, the form to edit the blog details will only be available to authors. Normal readers will just see a button to change password-->
             <% if (req.user && req.user.user_role === "Author") {%>
 
