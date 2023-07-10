@@ -7,9 +7,11 @@
         <title><%=settingsRow[0].blog_title%> | Settings</title>
     </head>
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar')%>
         <div class="container w-6/12 mx-auto mt-10 flex flex-col">
             <header class="flex justify-between flex-col">
+                <!--Page main heading element-->
                 <h1 class="text-4xl mt- mb-4 w-6/12">Settings</h1>
                 <a
                     class="p-3 mt-1 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-950 hover:bg-indigo-900 rounded-md self-start"
@@ -24,10 +26,11 @@
             <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
-            <% }) %> <% } %> <% if (req.user && req.user.user_role === "Author") {%>
+            <% }) %> <% } %>
+            <!--In the settings page, the form to edit the blog details will only be available to authors. Normal readers will just see a button to change password-->
+            <% if (req.user && req.user.user_role === "Author") {%>
 
             <h1 class="text-3xl mt-5 w-6/12">Blog Details</h1>
-
             <form class="flex flex-col" method="post" action="/dashboard/settings">
                 <label class="block my-4" for="blog_title">Blog Title</label>
                 <input
