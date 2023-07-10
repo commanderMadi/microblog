@@ -18,8 +18,8 @@
                 <a class="text-white mr-5" href="/">Homepage</a>
                 <% if (req.user.user_role==="Author" ) { %>
                 <a class="text-right mr-5" href="/dashboard">Dashboard</a>
-                <a class="text-right mr-5" href="/dashboard/settings">Settings</a>
                 <%} %>
+                <a class="text-right mr-5" href="/dashboard/settings">Settings</a>
                 <a class="text-white" href="/logout/">Log out</a>
             </div>
             <%} else {%>

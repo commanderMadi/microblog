@@ -188,11 +188,20 @@ router.post('/settings', updateSettingsValidationSchema, validate, (req, res, ne
     });
 });
 
-router.get('/change_password', (req, res, next) => {
-    res.render('changePassword.ejs');
+router.get('/change-password', (req, res, next) => {
+    let query = `SELECT BlogSettings.user_id, Users.user_name, 
+                  BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
+                  INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
+    db.all(query, function (err, settingsRow) {
+        if (err) {
+            next(err);
+        } else {
+            res.render('changePassword.ejs', { req, settingsRow });
+        }
+    });
 });
 
-router.post('/change_password', changePasswordValidationSchema, validate, async (req, res, next) => {
+router.post('/change-password', changePasswordValidationSchema, validate, async (req, res, next) => {
     let { old_password, new_password, confirm_new_password } = req.body;
     let errors, hashedPassword;
     let query = `SELECT * FROM Users WHERE user_id = ?`;
@@ -216,16 +225,16 @@ router.post('/change_password', changePasswordValidationSchema, validate, async 
                             next(err);
                         } else {
                             req.flash('success_msg', 'Password successfully changed!');
-                            res.redirect('/dashboard/change_password');
+                            res.redirect('/dashboard/change-password');
                         }
                     });
                 } else {
                     req.flash('failure_msg', 'Current Password is wrong');
-                    res.redirect('/dashboard/change_password');
+                    res.redirect('/dashboard/change-password');
                 }
             } else {
                 req.flash('failure_msg', 'No user found!');
-                res.redirect('/dashboard/change_password');
+                res.redirect('/dashboard/change-password');
             }
         }
     });

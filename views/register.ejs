@@ -16,11 +16,11 @@
             <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %> <%=error.msg %> <% }) %> <% } %>
             <!--Express Flash Messages-->
             <% if (messages.failure_msg) { %>
-            <p class="text-red-500"><%=messages.failure_msg%></p>
+            <p class="text-red-800"><%=messages.failure_msg%></p>
             <% } %>
             <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
-            <p class="text-red-500"><%=msg.msg%></p>
+            <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
 
             <form class="flex flex-col" action="/register" method="post">

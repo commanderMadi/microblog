@@ -14,7 +14,7 @@
             <h1 class="text-4xl my-10 w-6/12">Create Draft</h1>
             <!--Express Flash Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
-            <p class="text-red-500"><%=msg.msg%></p>
+            <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
             <form class="flex flex-col" action="/dashboard/article/create-article" method="post">
                 <label class="block my-4" for="title">Article Title</label>

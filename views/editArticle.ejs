@@ -17,7 +17,7 @@
             <%}%>
             <!--Express Flash Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
-            <p class="text-red-500"><%=msg.msg%></p>
+            <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
 
             <form class="flex flex-col" action="/dashboard/article/edit-article/<%=articleRow.article_id%>?_method=PUT" method="post">
