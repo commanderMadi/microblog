@@ -6,9 +6,12 @@
         <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
         <title><%=settingsRow[0].blog_title%> | Author Dashboard</title>
     </head>
+
     <body>
+        <!--Render the navbar partial-->
         <%- include('partials/navbar') %>
 
+        <!--Page main heading element-->
         <h1 class="text-4xl my-10 w-6/12 mx-auto">Author Dashboard</h1>
 
         <div class="drafts-container container w-6/12 mx-auto">
@@ -20,18 +23,31 @@
                     >Create New Draft</a
                 >
             </header>
+            <!----Express Flash Messages-->
             <% if(messages.success) {%>
             <div id="draft-creation-success" class="text-indigo-800 ml-2"><%=messages.success%></div>
-            <% } %> <%var draftCount = 0; rows.forEach(article => article.publish_state === "Draft" ? ++draftCount : false ); if(draftCount
-            === 0) { %>
+            <% } %>
+            <!--Check all articles with the state "Draft" . If there aren't any, display a message to reflect this-->
+            <%var draftCount=0; rows.forEach(article=> article.publish_state === "Draft" ? ++draftCount : false ); if(draftCount === 0) { %>
+
             <h2 class="text-lg text-center text-red-800 ml-1 my-5">
                 No Drafts available. Click on the "Create New Draft" Button to add one.
             </h2>
-            <%} %> <% rows.forEach(article => { if (article.publish_state === "Draft") { %>
+
+            <%} %>
+            <!-- Loop over all drafts and render them-->
+            <% rows.forEach(article=> { if (article.publish_state === "Draft") { %>
             <div class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-100 p-5 justify-end">
                 <div class="w-full text-lg font-semibold mb-5"><%=article.title%></div>
-                <div class="w-full text-gray-500 text-xs"><span>Date Created: </span><%=article.created_at_date%></div>
-                <div class="w-full text-gray-500 text-xs"><span>Date Modified: </span><%=article.modified_at_date%></div>
+                <div class="w-full text-gray-500 text-xs">
+                    <span>Date Created: </span>
+                    <%=article.created_at_date%>
+                </div>
+
+                <div class="w-full text-gray-500 text-xs">
+                    <span>Date Modified: </span>
+                    <%=article.modified_at_date%>
+                </div>
                 <form
                     class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
                     action="/dashboard/article/<%=article.article_id%>?_method=PUT"
@@ -60,20 +76,30 @@
         <div class="drafts-container container w-6/12 mx-auto">
             <header class="flex flex-col justify-between mb-10">
                 <h2 class="text-3xl ml-1 my-5">Published</h2>
-
-                <%var publishedCount = 0; rows.forEach(article => article.publish_state === "Published" ? ++publishedCount : false );
-                if(publishedCount === 0) { %>
+                <!-- Check all articles with the state "Published". If there aren't any, display a message to reflect this -->
+                <%var publishedCount=0; rows.forEach(article=> article.publish_state === "Published" ? ++publishedCount : false);%>
+                <%if(publishedCount === 0) { %>
                 <h2 class="text-lg text-center text-red-800 ml-1 my-5">No Published articles available. Publish some drafts first.</h2>
 
                 <%}%>
             </header>
-            <% rows.sort((a,b) => {if (a.publish_state.length && b.publish_state.length){ return a.publish_date < b.publish_date ? 1 :
-            -1}}).forEach(article => { if (article.publish_state !== "Draft") { %>
+            <!-- Display published articles in dashboard after sorting them on the front end in descending order. Newly published appear first -->
+            <% rows.sort((a,b)=> {if (a.publish_state.length && b.publish_state.length){ return a.publish_date < b.publish_date ? 1 :
+            -1}}).forEach(article=> { if (article.publish_state !== "Draft") { %>
             <div class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-100 p-5 justify-end">
                 <div class="w-full text-lg font-semibold mb-5"><%=article.title%></div>
-                <div class="w-full text-gray-500 text-xs"><span>Date Published: </span><%=article.publish_date%></div>
-                <div class="w-full text-gray-500 text-xs"><span>Date Created: </span><%=article.created_at_date%></div>
-                <div class="w-full text-gray-500 text-xs"><span>Date Modified: </span><%=article.modified_at_date%></div>
+                <div class="w-full text-gray-500 text-xs">
+                    <span>Date Published: </span>
+                    <%=article.publish_date%>
+                </div>
+                <div class="w-full text-gray-500 text-xs">
+                    <span>Date Created: </span>
+                    <%=article.created_at_date%>
+                </div>
+                <div class="w-full text-gray-500 text-xs">
+                    <span>Date Modified: </span>
+                    <%=article.modified_at_date%>
+                </div>
 
                 <a
                     class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end text-right"
@@ -93,6 +119,7 @@
         </div>
     </body>
     <script>
+        /* display a message briefly after creating a draft and then remove it from the DOM */
         const successMsgElement = document.getElementById('draft-creation-success');
         function clearMessage() {
             setTimeout(() => {

@@ -17,10 +17,11 @@
                     >Change Password</a
                 >
             </header>
+            <!--Express Flash Messages-->
             <% if(messages.success_msg) { %>
             <p class="text-indigo-800 mt-4"><%= messages.success_msg %></p>
             <%}%>
-            <!--Express Flash Messages-->
+            <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %> <% if (req.user && req.user.user_role === "Author") {%>
