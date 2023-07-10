@@ -80,8 +80,13 @@
             to add a comment or to interact with the article!
         </h3>
         <%}%>
+
+        <!--Load in the scripts that will ajax load the interactions data (likes and comments) when posting them using axios on the
+        client side.-->
         <script src="../js/interactions.js"></script>
         <script src="../js/comments.js"></script>
+
+        <!--Code to display a brief message when a user clicks to share the article to inform them that the article has been copied to the clipboard-->
         <script>
             document.getElementById('share-button').addEventListener('click', function () {
                 navigator.clipboard.writeText(window.location.href);
