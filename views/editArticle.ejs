@@ -24,6 +24,7 @@
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
 
+            <!--Article Edit Form-->
             <form class="flex flex-col" action="/dashboard/article/edit-article/<%=articleRow.article_id%>?_method=PUT" method="post">
                 <input type="hidden" name="_method" value="PUT" />
                 <label class="block my-4" for="title">Article Title</label>
