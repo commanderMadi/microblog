@@ -7,21 +7,24 @@
         <title><%=settingsRow[0].blog_title%> | Register</title>
     </head>
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <div class="container w-4/12 mx-auto mt-10">
+            <!--Page main heading element-->
             <h1 class="text-4xl my-10 w-6/12">Register</h1>
-            <!--Express Validator Failure Messages-->
-            <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %> <%=error.msg %> <% }) %> <% } %>
-            <!--Express Flash Messages-->
-            <% if (messages.failure_msg) { %>
-            <p class="text-red-800"><%=messages.failure_msg%></p>
-            <% } %>
+
             <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
 
+            <!--Express Flash Messages-->
+            <% if (messages.failure_msg) { %>
+            <p class="text-red-800"><%=messages.failure_msg%></p>
+            <% } %>
+
+            <!--Register Form-->
             <form class="flex flex-col" action="/register" method="post">
                 <label class="block my-4" for="username">Username</label>
                 <input

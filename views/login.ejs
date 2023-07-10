@@ -7,19 +7,24 @@
         <title><%=settingsRow[0].blog_title%> | Log In</title>
     </head>
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <div class="container w-4/12 mx-auto mt-10">
-            <h1 class="text-4xl my-10 w-6/12">Login</h1>
+            <!--Page main heading element-->
+            <h1 class="text-4xl my-10 w-6/12">Log In</h1>
+
             <!--Passport failed authentication messages-->
             <% if (messages.error) { %>
             <p class="text-red-800"><%= messages.error %></p>
             <% } %>
+
             <!--Express Flash Messages-->
             <% if (messages.success_msg) { %>
             <p class="text-indigo-800"><%= messages.success_msg %></p>
             <% } %>
 
+            <!--Login Form-->
             <form class="flex flex-col" action="/login" method="post">
                 <label class="block my-4" for="email">Email</label>
                 <input
