@@ -7,14 +7,18 @@
         <title><%=settingsRow[0].blog_title%> | Create New Draft</title>
     </head>
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <div class="container w-6/12 mx-auto mt-10">
+            <!--Page main heading element-->
             <h1 class="text-4xl my-10 w-6/12">Create Draft</h1>
             <!--Express Validator Messages-->
             <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
             <p class="text-red-800"><%=msg.msg%></p>
             <% }) %> <% } %>
+
+            <!--Draft creation form-->
             <form class="flex flex-col" action="/dashboard/article/create-article" method="post">
                 <label class="block my-4" for="title">Article Title</label>
                 <input
