@@ -80,25 +80,24 @@
             to add a comment or to interact with the article!
         </h3>
         <%}%>
-
-        <!--Load in the scripts that will ajax load the interactions data (likes and comments) when posting them using axios on the
-        client side.-->
-        <script src="../js/interactions.js"></script>
-        <script src="../js/comments.js"></script>
-
-        <!--Code to display a brief message when a user clicks to share the article to inform them that the article has been copied to the clipboard-->
-        <script>
-            document.getElementById('share-button').addEventListener('click', function () {
-                navigator.clipboard.writeText(window.location.href);
-                const notificationElement = document.createElement('div');
-                notificationElement.className = 'text-emerald-300 text-sm ml-2 font-medium';
-                notificationElement.textContent = 'Article URL copied to clipboard!';
-
-                document.getElementById('interactions-container').append(notificationElement);
-                setTimeout(() => {
-                    document.getElementById('interactions-container').lastElementChild.innerHTML = '';
-                }, 3000);
-            });
-        </script>
     </body>
+    <!--Load in the scripts that will ajax load the interactions data (likes and comments) when posting them using axios on the
+        client side.-->
+    <script src="../js/interactions.js"></script>
+    <script src="../js/comments.js"></script>
+
+    <!--Code to display a brief message when a user clicks to share the article to inform them that the article has been copied to the clipboard-->
+    <script>
+        document.getElementById('share-button').addEventListener('click', function () {
+            navigator.clipboard.writeText(window.location.href);
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'text-emerald-300 text-sm ml-2 font-medium';
+            notificationElement.textContent = 'Article URL copied to clipboard!';
+
+            document.getElementById('interactions-container').append(notificationElement);
+            setTimeout(() => {
+                document.getElementById('interactions-container').lastElementChild.innerHTML = '';
+            }, 3000);
+        });
+    </script>
 </html>
