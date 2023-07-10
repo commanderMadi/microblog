@@ -3,22 +3,52 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+
         <title>Create A New Article</title>
     </head>
     <body>
-        <div>
-            <%if (typeof errors !== 'undefined') errors.forEach(error => { %>
-            <p><%=error.msg%></p>
-            <%}) %>
+        <%-include('partials/navbar') %>
+
+        <div class="container w-6/12 mx-auto mt-10">
+            <h1 class="text-4xl my-10 w-6/12">Create Draft</h1>
+            <!--Express Flash Messages-->
+            <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
+            <p class="text-red-500"><%=msg.msg%></p>
+            <% }) %> <% } %>
+            <form class="flex flex-col" action="/dashboard/article/create-article" method="post">
+                <label class="block my-4" for="title">Article Title</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    type="text"
+                    name="title"
+                />
+                <label class="block my-4" for="subtitle">Article Subtitle</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    type="text"
+                    name="subtitle"
+                />
+                <label class="block my-4" for="contents">Article Content</label>
+                <textarea
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    name="contents"
+                    cols="30"
+                    rows="10"
+                ></textarea>
+                <div class="action-buttons flex justify-end">
+                    <input
+                        class="p-3 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                        type="submit"
+                        value="Create Draft"
+                    />
+                    <a
+                        class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-red-800 hover:bg-indigo-950 rounded-md self-end"
+                        href="/dashboard"
+                        >Go Back</a
+                    >
+                </div>
+            </form>
         </div>
-        <form action="/dashboard/article/create-article" method="post">
-            <label for="title">Article Title:</label>
-            <input required type="text" name="title" />
-            <label for="subtitle">Article Subtitle:</label>
-            <input required type="text" name="subtitle" />
-            <label for="contents">Article Body:</label>
-            <textarea required name="contents" cols="30" rows="10"></textarea>
-            <input type="submit" value="Create Article as a Draft" />
-        </form>
     </body>
 </html>

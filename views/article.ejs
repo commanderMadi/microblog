@@ -5,111 +5,60 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
 
-        <link rel="stylesheet" href="../styles/styles.css" type="text/css" />
+        <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
         <title>Document</title>
     </head>
-    <body>
-        <header>
-            <div class="w-screen bg-indigo-900 p-5 flex justify-between">
-                <div class="flex text-white">
-                    <h1 class="self-center">
-                        <a href="/"><%=settingsRow[0].blog_title%></a>
-                    </h1>
-                </div>
-                <div class="text-white">
-                    <h2><%=settingsRow[0].blog_subtitle%></h2>
-                    <h3 class="text-right">By: <%=settingsRow[0].user_name%></h3>
-                </div>
-            </div>
-            <div class="w-screen bg-indigo-950 p-5 align-middle">
-                <div class="flex justify-between text-white">
-                    <% if (req.user) {%>
-                    <h3>Hello <%=req.user.user_name%></h3>
-                    <div class="flex sign-out">
-                        <% if (req.user.user_role==="Author" ) { %>
-                        <a class="text-right mr-5" href="/dashboard">Dashboard</a>
-                        <%} %>
-                        <a class="text-white" href="/logout/">Log out</a>
-                    </div>
-                    <%} else {%>
-                    <div class="flex w-full sign-in justify-end">
-                        <a class="text-right" href="/login/">Sign In</a>
-                    </div>
-                    <%}%>
-                </div>
-            </div>
-        </header>
+    <body class="font-roboto">
+        <%-include('partials/navbar') %>
 
-        <article
-            id="article-main-container"
-            class="mt-10 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
-        >
-            <header class="article-information mt-10">
-                <h1 class="mb-3 text-5xl"><%=rows[0].title%></h1>
-                <h2 class="ml-2 text-xl"><%=rows[0].subtitle%></h2>
-                <span class="ml-2 text-xs text-gray-400">
+        <article id="article-main-container" class="mt-10 container w-6/12 font-roboto bg-slate-50 shadow mx-auto">
+            <header class="article-information bg-indigo-950 mt-10 p-3">
+                <h1 class="mb-1 ml-4 text-5xl text-gray-300 pt-6"><%=rows[0].title%></h1>
+                <h2 class="ml-5 text-xl text-gray-300"><%=rows[0].subtitle%></h2>
+                <div class="ml-5 mt-4 mb-4 text-xs text-gray-300">
                     <time><%=rows[0].publish_date%></time>
-                </span>
-                <span class="border-separate text-gray-400">|</span>
-                <span class="text-xs text-gray-400">
-                    Likes: <span id="total-likes"><%=rows[0].likes_count%></span>
-                </span>
+                </div>
+                <div class="ml-5 mt-4 mb-4 text-xs text-gray-300">
+                    <span id="total-likes"
+                        ><%=rows[0].likes_count === 1 ? `${rows[0].likes_count} Like` : `${rows[0].likes_count} Likes` %>
+                    </span>
+                </div>
             </header>
-            <div class="container article-contents-container">
-                <p
-                    class="leading-8 p-3 tracking-wide ml-2 mt-8 text-base article-contents"
-                >
-                    <%=rows[0].contents%>
-                </p>
+
+            <div class="container article-contents-container mt-6">
+                <p class="text-gray-700 leading-7 px-3 py-8 ml-2 mt-2 text-base article-contents"><%=rows[0].contents%></p>
             </div>
         </article>
-        <div
-            id="interactions-container"
-            class="container w-6/12 bg-slate-300 p-4 mx-auto"
-        >
+        <div id="interactions-container" class="container flex w-6/12 items-center justify-end bg-indigo-950 shadow p-4 mx-auto">
             <%if (req.user) {%>
 
             <form id="likes-interact-form" action="/article/interact/" method="post">
-                <input
-                    hidden
-                    type="text"
-                    id="article-id-interact"
-                    name="articleID"
-                    value="<%=rows[0].article_id%>"
-                />
+                <input hidden type="text" id="article-id-interact" name="articleID" value="<%=rows[0].article_id%>" />
 
-                <%var filteredData = likesRows.filter(row => req.user.user_id ===
-                row.user_id) %> <input id="submit-btn" class="p-1 mt-1 w-16
-                border-indigo-500 cursor-pointer text-indigo-900 rounded-md self-end"
-                type="submit" value="<%=filteredData.length > 0 ? "Unlike" :
-                "Like"%>" />
+                <%var filteredData = likesRows.filter(row => req.user.user_id === row.user_id) %> <input id="submit-btn" class=" w-16
+                border-indigo-500 cursor-pointer text-white" type="submit" value="<%=filteredData.length > 0 ? "Unlike" : "Like"%>" />
             </form>
             <% }%>
+            <button class="font-light text-white" id="share-button">Share</button>
         </div>
-        <div
-            id="comments-container"
-            class="mt-10 mb-8 container w-6/12 font-roboto bg-slate-100 p-4 mx-auto article-content-container"
-        >
+        <div id="comments-container" class="mt-10 mb-8 container w-6/12 mx-auto">
+            <h3 class="text-3xl comments-container-heading text-gray-500">
+                Comments: <span id="comments-count"><%=commentsRows.length%></span>
+            </h3>
             <% commentsRows.forEach(comment => {%>
-            <p><%=comment.comment_author%>: <%=comment.comment_text%></p>
+            <div class="container single-comment-container mt-4 mb-4 mx-auto bg-gray-50 rounded-md p-4">
+                <div class="text-gray-400 text-lg font-medium"><%=comment.comment_author%></div>
+                <div class="text-gray-400 text-sm"><%=comment.comment_date%></div>
+                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+                <div class="mt-4"><%=comment.comment_text%></div>
+            </div>
             <%})%>
         </div>
-        <div
-            class="article-interactions-container flex container w-6/12 mt-4 mx-auto"
-        >
+
+        <div class="add-comments-container flex container w-6/12 mt-4 mx-auto">
             <% if (req.user) {%>
-            <form
-                id="add-comment-form"
-                class="flex flex-col w-full flex-wrap"
-                action="/article/comment"
-                method="post"
-            >
-                <input
-                    hidden
-                    type="text"
-                    id="comment-article-id"
-                    value="<%=rows[0].article_id%>"
-                />
+            <form id="add-comment-form" class="flex flex-col w-full flex-wrap" action="/article/comment" method="post">
+                <input hidden type="text" id="comment-article-id" value="<%=rows[0].article_id%>" />
                 <textarea
                     id="comment-area"
                     class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
@@ -119,7 +68,7 @@
                     rows="10"
                 ></textarea>
                 <input
-                    class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-indigo-800 rounded-md self-end"
+                    class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
                     type="submit"
                     value="Add a Comment"
                 />
@@ -128,13 +77,24 @@
 
         <%} else {%>
         <h3 class="text-red-700">
-            <a class="text-indigo-950 hover:text-emerald-950" href="/login"
-                >Sign in</a
-            >
+            <a class="text-indigo-950 hover:text-emerald-950" href="/login">Sign in</a>
             to add a comment or to interact with the article!
         </h3>
         <%}%>
         <script src="../js/interactions.js"></script>
         <script src="../js/comments.js"></script>
+        <script>
+            document.getElementById('share-button').addEventListener('click', function () {
+                navigator.clipboard.writeText(window.location.href);
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'text-emerald-300 text-sm ml-2 font-medium';
+                notificationElement.textContent = 'Article URL copied to clipboard!';
+
+                document.getElementById('interactions-container').append(notificationElement);
+                setTimeout(() => {
+                    document.getElementById('interactions-container').lastElementChild.innerHTML = '';
+                }, 3000);
+            });
+        </script>
     </body>
 </html>

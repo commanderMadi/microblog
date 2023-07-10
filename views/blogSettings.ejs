@@ -3,36 +3,56 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+
         <title>Blog Settings</title>
     </head>
     <body>
-        <h1>Settings Page</h1>
-        <form method="post" action="/dashboard/settings" class="settings-container">
-            <% rows.forEach (row => { %>
-            <label for="blog_title">Blog Title:</label>
-            <input
-                required
-                type="text"
-                name="blog_title"
-                value="<%=row.blog_title%>"
-            />
-            <label for="blog_subtitle">Blog Subtitle:</label>
-            <input
-                required
-                type="text"
-                name="blog_subtitle"
-                value="<%=row.blog_subtitle%>"
-            />
-            <label for="user">Author Name:</label>
-            <input
-                required
-                type="text"
-                name="user_name"
-                value="<%=row.user_name%>"
-            />
-            <input type="submit" value="Save Changes" />
-
-            <% })%>
-        </form>
+        <%-include('partials/navbar')%>
+        <div class="container w-6/12 mx-auto mt-10 flex flex-col">
+            <h1 class="text-4xl my-10 w-6/12">Blog Settings</h1>
+            <% if(messages.success_msg) { %>
+            <p class="text-indigo-800"><%= messages.success_msg %></p>
+            <%}%>
+            <!--Express Flash Messages-->
+            <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
+            <p class="text-red-500"><%=msg.msg%></p>
+            <% }) %> <% } %>
+            <form class="flex flex-col" method="post" action="/dashboard/settings">
+                <label class="block my-4" for="blog_title">Blog Title</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    type="text"
+                    name="blog_title"
+                    value="<%=settingsRow[0].blog_title%>"
+                />
+                <label class="block my-4" for="blog_subtitle">Blog Subtitle</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    type="text"
+                    name="blog_subtitle"
+                    value="<%=settingsRow[0].blog_subtitle%>"
+                />
+                <label class="block my-4" for="user_name">Author Name</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    type="text"
+                    name="user_name"
+                    value="<%=settingsRow[0].user_name%>"
+                />
+                <div class="action-buttons flex justify-end">
+                    <input
+                        class="p-3 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                        type="submit"
+                        value="Save Changes"
+                    />
+                    <a
+                        class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-red-800 hover:bg-indigo-950 rounded-md self-end"
+                        href="/dashboard"
+                        >Go Back</a
+                    >
+                </div>
+            </form>
+        </div>
     </body>
 </html>

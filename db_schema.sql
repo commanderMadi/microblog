@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS Comments (
     comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     comment_author TEXT NOT NULL,
     comment_text TEXT NOT NULL,
+    comment_date TEXT NOT NULL,
     article_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     FOREIGN KEY (article_id) REFERENCES Articles (article_id),

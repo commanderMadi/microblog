@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const assert = require('assert');
+const moment = require('moment');
 // const checkNotLoggedIn = require('../middleware/checkNotLoggedIn');
 
 router.get('/', (req, res, next) => {
-    let query =
-        'SELECT * FROM Articles WHERE publish_state = "Published" ORDER BY publish_date DESC';
+    let query = 'SELECT * FROM Articles WHERE publish_state = "Published" ORDER BY publish_date DESC';
     let secondQuery = `SELECT BlogSettings.user_id, Users.user_name, 
                   BlogSettings.blog_title, BlogSettings.blog_subtitle FROM BlogSettings
                   INNER JOIN Users ON BlogSettings.user_id=Users.user_id;`;
@@ -21,10 +21,7 @@ router.get('/', (req, res, next) => {
             } else {
                 if (req.user && req.user.user_role === 'Author') {
                     let { user_password } = req.user;
-                    authorFirstTimeLogin =
-                        user_password === process.env.FIRST_TIME_LOGIN_PASSWORD ||
-                        user_password === 'admintest123';
-                    console.log(authorFirstTimeLogin);
+                    authorFirstTimeLogin = user_password === process.env.FIRST_TIME_LOGIN_PASSWORD || user_password === 'admintest123';
                 }
                 res.render('index.ejs', {
                     authorFirstTimeLogin,
@@ -67,6 +64,7 @@ router.get('/article/:id', (req, res, next) => {
                             likesRows,
                             commentsRows,
                             settingsRow,
+                            commentsRows,
                         });
                     }
                 });
@@ -76,18 +74,25 @@ router.get('/article/:id', (req, res, next) => {
 });
 
 router.post('/article/comment', (req, res, next) => {
-    let query = `INSERT INTO Comments ("article_id", "comment_text", "comment_author", "user_id")
-                VALUES (?,?,?,?)`;
+    let insertQuery = `INSERT INTO Comments ("article_id", "comment_text", "comment_author", "comment_date", "user_id")
+                VALUES (?,?,?,?, ?)`;
+    let selectAllQuery = `SELECT * FROM Comments WHERE article_id = ?`;
     let { comment, articleID } = req.body;
     let commentAuthor = req.user.user_name;
     let userID = req.user.user_id;
-
-    db.all(query, [articleID, comment, commentAuthor, userID], function (err, row) {
+    let commentsCount = 0;
+    let date = moment().format('MMMM Do YYYY, h:mm a');
+    db.all(insertQuery, [articleID, comment, commentAuthor, date, userID], function (err, rows) {
+        if (err) {
+            next(err);
+        }
+    });
+    db.all(selectAllQuery, [articleID], function (err, rows) {
         if (err) {
             next(err);
         } else {
-            console.log('ok!');
-            res.send({ comment, commentAuthor });
+            commentsCount = rows.length;
+            res.send({ comment, commentAuthor, commentsCount, commentDate: date });
         }
     });
 });
@@ -98,7 +103,7 @@ router.post('/article/interact', (req, res, next) => {
                 VALUES (?,?)`;
     let deleteQuery = `DELETE FROM Likes WHERE user_id = ?`;
     let { articleID, likesCount, operation } = req.body;
-    console.log(operation);
+
     let userID = req.user.user_id;
     let numericID = parseInt(articleID);
     let numericLikeCount = parseInt(likesCount);
@@ -106,13 +111,11 @@ router.post('/article/interact', (req, res, next) => {
 
     switch (operation) {
         case 'Like':
-            console.log('like run');
             likesCountAfterInteraction++;
             db.all(insertQuery, [userID, articleID], function (err, rows) {
                 if (err) {
                     next(err);
                 } else {
-                    console.log('done!');
                     res.send({
                         numericLikeCount: likesCountAfterInteraction,
                     });
@@ -120,7 +123,6 @@ router.post('/article/interact', (req, res, next) => {
             });
             break;
         case 'Unlike':
-            console.log('unlike run');
             likesCountAfterInteraction--;
             db.all(deleteQuery, [userID], function (err, rows) {
                 if (err) {
@@ -133,16 +135,11 @@ router.post('/article/interact', (req, res, next) => {
             });
             break;
     }
-    db.all(
-        updateQuery,
-        [likesCountAfterInteraction, articleID],
-        function (err, rows) {
-            console.log('do I even run!');
-            if (err) {
-                next(err);
-            }
+    db.all(updateQuery, [likesCountAfterInteraction, articleID], function (err, rows) {
+        if (err) {
+            next(err);
         }
-    );
+    });
 });
 
 router.get('/logout', (req, res, next) => {

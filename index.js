@@ -9,6 +9,7 @@ const userLoginRoutes = require('./routes/userLoginRoutes');
 const userRegisterRoutes = require('./routes/userRegisterRoutes');
 const authorRoutes = require('./routes/authorRoutes');
 const readerRoutes = require('./routes/readerRoutes');
+const errorHandler = require('./middleware/errorHandler');
 const initializePassport = require('./middleware/passportConfig');
 
 require('dotenv').config();
@@ -36,6 +37,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(methodOverride('_method'));
 
 //items in the global namespace are accessible throught out the node application
 global.db = new sqlite3.Database('./database.db', function (err) {
@@ -50,15 +52,16 @@ global.db = new sqlite3.Database('./database.db', function (err) {
 
 //set the app to use ejs for rendering
 app.set('view engine', 'ejs');
-app.use(methodOverride('_method'));
 
 app.use('/dashboard', authorRoutes);
 app.use('/login', userLoginRoutes);
 app.use('/register', userRegisterRoutes);
 app.use('/', readerRoutes);
-app.get('*', (req, res) => {
-    res.status(404).sendFile(__dirname + '/public/html/404.html');
-});
+app.use(errorHandler);
+
+// app.get('*', (req, res) => {
+//     res.status(404).sendFile(__dirname + '/public/html/404.html');
+// });
 
 global.db = db;
 app.listen(port, () => {

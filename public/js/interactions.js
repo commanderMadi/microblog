@@ -16,15 +16,13 @@ if (elem) {
                 operation,
             })
             .then(function (response) {
-                console.log(totalLikes);
-                console.log(response.data);
                 if (totalLikesCount <= response.data.numericLikeCount) {
                     submitBtn.value = 'Unlike';
                 } else {
                     submitBtn.value = 'Like';
                 }
                 totalLikesCount = response.data.numericLikeCount;
-                totalLikes.textContent = totalLikesCount;
+                totalLikes.textContent = totalLikesCount === 1 ? totalLikesCount + ' Like' : totalLikesCount + ' Likes';
             })
             .catch(function (error) {
                 console.log(error);

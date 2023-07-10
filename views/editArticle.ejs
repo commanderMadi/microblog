@@ -3,30 +3,64 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+
         <title>Edit Article</title>
     </head>
     <body>
-        <% if(messages.success) { %>
-        <p><%= messages.success %></p>
-        <p><%}%> <% rows.forEach(row => { %></p>
+        <%-include('partials/navbar') %>
 
-        <form
-            action="/dashboard/article/edit-article/<%=row.article_id%>?_method=PUT"
-            method="post"
-        >
-            <input type="hidden" name="_method" value="PUT" />
-            <label for="title">Article Title:</label>
-            <input required type="text" name="title" value="<%=row.title%>" />
-            <label for="subtitle">Article Subtitle:</label>
-            <input required type="text" name="subtitle" value="<%=row.subtitle%>" />
-            <label for="contents">Article Body:</label>
-            <textarea required name="contents" cols="30" rows="10">
-<%=row.contents%></textarea
-            >
-            <input type="submit" value="Save Edits" />
-        </form>
-        <a href="/dashboard">Discard Changes</a>
+        <div class="container w-6/12 mx-auto mt-10 flex flex-col">
+            <h1 class="text-4xl my-10 w-6/12">Edit Article</h1>
+            <% if(messages.success) { %>
+            <p class="text-indigo-800"><%= messages.success %></p>
+            <%}%>
+            <!--Express Flash Messages-->
+            <% if (messages.failure_msgs) { %> <%messages.failure_msgs[0].errors.forEach(msg => {%>
+            <p class="text-red-500"><%=msg.msg%></p>
+            <% }) %> <% } %>
 
-        <%})%>
+            <form class="flex flex-col" action="/dashboard/article/edit-article/<%=articleRow.article_id%>?_method=PUT" method="post">
+                <input type="hidden" name="_method" value="PUT" />
+                <label class="block my-4" for="title">Article Title</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    required
+                    type="text"
+                    name="title"
+                    value="<%=articleRow.title%>"
+                />
+                <label class="block my-4" for="subtitle">Article Subtitle</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    required
+                    type="text"
+                    name="subtitle"
+                    value="<%=articleRow.subtitle%>"
+                />
+                <label class="block my-4" for="contents">Article Content</label>
+                <textarea
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    required
+                    name="contents"
+                    cols="30"
+                    rows="10"
+                >
+<%=articleRow.contents%></textarea
+                >
+                <div class="action-buttons flex justify-end">
+                    <input
+                        class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                        type="submit"
+                        value="Save"
+                    />
+                    <a
+                        class="p-3 mt-4 border-indigo-500 cursor-pointer text-white bg-red-800 hover:bg-indigo-950 rounded-md self-end"
+                        href="/dashboard"
+                        >Go Back</a
+                    >
+                </div>
+            </form>
+        </div>
     </body>
 </html>

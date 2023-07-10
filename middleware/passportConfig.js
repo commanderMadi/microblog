@@ -10,7 +10,6 @@ function initialize(passport) {
             }
             if (rows.length > 0) {
                 const user = rows[0];
-                console.log(password, user.user_password);
                 bcrypt.compare(password, user.user_password, (err, matched) => {
                     if (matched) {
                         return done(null, user);
@@ -28,18 +27,13 @@ function initialize(passport) {
             } else {
                 // No user found in DB
                 return done(null, false, {
-                    message: 'No user with that email address',
+                    message: 'No user with that email address!',
                 });
             }
         });
     };
 
-    passport.use(
-        new LocalStrategy(
-            { usernameField: 'email', passwordField: 'password' },
-            authenticateUser
-        )
-    );
+    passport.use(new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, authenticateUser));
     // Stores user details inside session. serializeUser determines which data of the user
     // object should be stored in the session. The result of the serializeUser method is attached
     // to the session as req.session.passport.user = {}. Here for instance, it would be (as we provide

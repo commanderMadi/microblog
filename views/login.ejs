@@ -3,22 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+
         <title>Document</title>
     </head>
     <body>
-        <!--Passport failed authentication messages-->
-        <% if (messages.error) { %>
-        <li><%= messages.error %>.</li>
-        <% } %>
-        <!--Express Flash Messages-->
-        <% if (messages.success_msg) { %>
-        <li><%= messages.success_msg %></li>
-        <% } %>
-        <form action="/login" method="post">
-            <input type="email" name="email" />
-            <input type="password" name="password" />
-            <input type="submit" value="Sign In" />
-        </form>
-        <h3>Don't have an account? <a href="/register/">Register</a></h3>
+        <%-include('partials/navbar') %>
+
+        <div class="container w-4/12 mx-auto mt-10">
+            <h1 class="text-4xl my-10 w-6/12">Login</h1>
+            <!--Passport failed authentication messages-->
+            <% if (messages.error) { %>
+            <p class="text-red-800"><%= messages.error %></p>
+            <% } %>
+            <!--Express Flash Messages-->
+            <% if (messages.success_msg) { %>
+            <p class="text-indigo-800"><%= messages.success_msg %></p>
+            <% } %>
+
+            <form class="flex flex-col" action="/login" method="post">
+                <label class="block my-4" for="email">Email</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    required
+                    type="email"
+                    name="email"
+                />
+                <label class="block my-4" for="password">Password</label>
+                <input
+                    class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
+                    required
+                    type="password"
+                    name="password"
+                />
+
+                <div class="action-buttons flex justify-between items-center">
+                    <h3>Don't have an account? <a class="text-red-700 font-bold hover:text-indigo-950" href="/register/">Register</a>.</h3>
+                    <input
+                        class="p-3 mt-6 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                        type="submit"
+                        value="Log In"
+                    />
+                </div>
+            </form>
+        </div>
     </body>
 </html>
