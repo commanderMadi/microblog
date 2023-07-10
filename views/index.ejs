@@ -8,9 +8,11 @@
     </head>
 
     <body>
+        <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <main class="wrapper">
+            <!-- Display an alert message for authors who log in with the default password stored in the db schema file to change their password-->
             <% if (req.user && req.user.user_role==="Author" && authorFirstTimeLogin) {%>
             <div class="pw-change-alert bg-red-500 border-r-red-700 p-3">
                 <p class="text-white">
@@ -20,23 +22,30 @@
                 </p>
             </div>
             <%}%>
+
             <section class="published-articles-section">
+                <!-- If there are no published articles, display a message that reflects this and make it unique for authors -->
                 <% if (rows.length === 0 && req.user && req.user.user_role === "Author") { %>
                 <h1 class="text-center text-red-800 text-4xl mt-10">
                     No published articles yet. Go to the <a class="text-indigo-900" href="/dashboard">dashboard</a> to create some articles.
                 </h1>
+                <!-- If there are no published articles, display a message that reflects this to all users who are not authors -->
                 <% } else if (rows.length === 0) { %>
                 <h1 class="text-center text-red-800 text-4xl mt-10">
                     No published articles yet. Wait for the authors to publish some articles.
                 </h1>
 
                 <%}else { %>
+                <!-- Otherwise, display the main page heading -->
                 <h1 class="mt-10 mb-5 ml-3 published-articles-title text-4xl">Published Articles</h1>
 
                 <% } %>
                 <div
                     class="mx-auto container published-articles-container content-center align-items-center grid grid-rows-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                 >
+                    <!-- Display published articles. Published articles are sorted in the backend by publish date, in descending order-->
+                    <!-- Hence, the very first article in the rows we get will always be the newest one-->
+                    <!-- if that's the case, we add a "Latest" text to this article to make it stand out-->
                     <% rows.forEach((article,i)=> { if( i === 0) {%>
                     <div class="flex flex-col justify-end m-3 article-container border shadow border-stone-400 text-center">
                         <img class="mx-auto" src="images/article_icon.png" alt="Article icon" width="200" height="200" />
