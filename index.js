@@ -58,9 +58,9 @@ app.use('/register', userRegisterRoutes);
 app.use('/', readerRoutes);
 app.use(errorHandler);
 
-// app.get('*', (req, res) => {
-//     res.status(404).sendFile(__dirname + '/public/html/404.html');
-// });
+app.get('*', (req, res) => {
+    res.status(404).sendFile(__dirname + '/public/html/404.html');
+});
 
 global.db = db;
 app.listen(port, () => {
