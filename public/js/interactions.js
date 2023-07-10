@@ -25,7 +25,7 @@ if (elem) {
                 totalLikes.textContent = totalLikesCount === 1 ? totalLikesCount + ' Like' : totalLikesCount + ' Likes';
             })
             .catch(function (error) {
-                console.log(error);
+                return new Error(error);
             });
     });
 }

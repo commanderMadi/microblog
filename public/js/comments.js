@@ -42,7 +42,7 @@ if (addCommentForm) {
                 commentsContainer.append(commentContainerElement);
             })
             .catch(function (error) {
-                console.log(error);
+                return new Error(error);
             });
         commentArea.value = '';
     });

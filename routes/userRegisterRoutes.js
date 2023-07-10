@@ -35,19 +35,6 @@ router.post('/', registerValidationSchema, validate, async (req, res, next) => {
         hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    db.all(query, [email], function (err, rows) {
-        if (err) {
-            console.log('there is an error');
-            next(err);
-        } else {
-            // There are users already in the DB with this email
-            if (rows.length > 0) {
-                req.flash('failure_msg', 'Email already registered. Login instead or try with a different email.');
-                res.redirect('/register');
-            }
-        }
-    });
-
     db.all(secondQuery, [username, email, hashedPassword, userRole], function (err, rows) {
         if (err) {
             next(err);
