@@ -4,6 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <title><%=settingsRow[0].blog_title%> | Author Dashboard</title>
     </head>
 
@@ -12,33 +14,45 @@
         <%- include('partials/navbar') %>
 
         <!--Page main heading element-->
-        <h1 class="text-4xl my-10 w-6/12 mx-auto">Author Dashboard</h1>
+        <h1 class="text-2xl md:text-4xl my-10 w-10/12 md:w-6/12 mx-auto">
+            Author Dashboard
+        </h1>
 
-        <div class="drafts-container container w-6/12 mx-auto">
+        <div
+            class="drafts-container container shadow border-2 my-4 border-gray-200 p-4 w-10/12 md:w-6/12 mx-auto"
+        >
             <header class="flex items-center justify-between mb-10">
-                <h2 class="text-3xl ml-1 my-5">Drafts</h2>
+                <h2 class="text-2xl md:text-3xl ml-1 my-5">Drafts</h2>
                 <a
-                    class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-950 hover:bg-indigo-900 rounded-md self-end text-right"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-950 hover:bg-indigo-900 rounded-md self-end text-right"
                     href="/dashboard/article/create-article"
                     >Create New Draft</a
                 >
             </header>
             <!----Express Flash Messages-->
             <% if(messages.success) {%>
-            <div id="draft-creation-success" class="text-indigo-800 ml-2"><%=messages.success%></div>
+            <div id="draft-creation-success" class="text-indigo-800 ml-2">
+                <%=messages.success%>
+            </div>
             <% } %>
             <!--Check all articles with the state "Draft" . If there aren't any, display a message to reflect this-->
-            <%var draftCount=0; rows.forEach(article=> article.publish_state === "Draft" ? ++draftCount : false ); if(draftCount === 0) { %>
+            <%var draftCount=0; rows.forEach(article=> article.publish_state ===
+            "Draft" ? ++draftCount : false ); if(draftCount === 0) { %>
 
-            <h2 class="text-lg text-center text-red-800 ml-1 my-5">
-                No Drafts available. Click on the "Create New Draft" Button to add one.
+            <h2 class="text-sm md:text-2xl text-center text-red-800 ml-1 my-5">
+                No Drafts available. Click on the "Create New Draft" Button to add
+                one.
             </h2>
 
             <%} %>
             <!-- Loop over all drafts and render them-->
             <% rows.forEach(article=> { if (article.publish_state === "Draft") { %>
-            <div class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-100 p-5 justify-end">
-                <div class="w-full text-lg font-semibold mb-5"><%=article.title%></div>
+            <div
+                class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-200 p-5 justify-end"
+            >
+                <div class="w-full text-lg font-semibold mb-5">
+                    <%=article.title%>
+                </div>
                 <div class="w-full text-gray-500 text-xs">
                     <span>Date Created: </span>
                     <%=article.created_at_date%>
@@ -49,7 +63,7 @@
                     <%=article.modified_at_date%>
                 </div>
                 <form
-                    class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
                     action="/dashboard/article/<%=article.article_id%>?_method=PUT"
                     method="post"
                 >
@@ -57,12 +71,12 @@
                     <input class="cursor-pointer" type="submit" value="Publish" />
                 </form>
                 <a
-                    class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end text-right"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end text-right"
                     href="/dashboard/article/edit-article/<%=article.article_id%>"
                     >Edit</a
                 >
                 <form
-                    class="p-3 mt-4 mx-2 border-red-500 cursor-pointer text-white bg-red-800 hover:bg-red-700 rounded-md self-end"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-red-500 cursor-pointer text-white bg-red-800 hover:bg-red-700 rounded-md self-end"
                     method="post"
                     action="/dashboard/article/<%=article.article_id%>?_method=DELETE"
                 >
@@ -73,21 +87,31 @@
             <%}})%>
         </div>
 
-        <div class="drafts-container container w-6/12 mx-auto">
+        <div
+            class="drafts-container container shadow border-2 my-4 border-gray-200 p-4 w-10/12 md:w-6/12 mx-auto"
+        >
             <header class="flex flex-col justify-between mb-10">
-                <h2 class="text-3xl ml-1 my-5">Published</h2>
+                <h2 class="text-2xl md:text-3xl ml-1 my-5">Published</h2>
                 <!-- Check all articles with the state "Published". If there aren't any, display a message to reflect this -->
-                <%var publishedCount=0; rows.forEach(article=> article.publish_state === "Published" ? ++publishedCount : false);%>
-                <%if(publishedCount === 0) { %>
-                <h2 class="text-lg text-center text-red-800 ml-1 my-5">No Published articles available. Publish some drafts first.</h2>
+                <%var publishedCount=0; rows.forEach(article=> article.publish_state
+                === "Published" ? ++publishedCount : false);%> <%if(publishedCount
+                === 0) { %>
+                <h2 class="text-sm text-center text-red-800 ml-1 my-5">
+                    No Published articles available. Publish some drafts first.
+                </h2>
 
                 <%}%>
             </header>
             <!-- Display published articles in dashboard after sorting them on the front end in descending order. Newly published appear first -->
-            <% rows.sort((a,b)=> {if (a.publish_state.length && b.publish_state.length){ return a.publish_date < b.publish_date ? 1 :
+            <% rows.sort((a,b)=> {if (a.publish_state.length &&
+            b.publish_state.length){ return a.publish_date < b.publish_date ? 1 :
             -1}}).forEach(article=> { if (article.publish_state !== "Draft") { %>
-            <div class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-100 p-5 justify-end">
-                <div class="w-full text-lg font-semibold mb-5"><%=article.title%></div>
+            <div
+                class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-200 p-5 justify-end"
+            >
+                <div class="w-full text-lg font-semibold mb-5">
+                    <%=article.title%>
+                </div>
                 <div class="w-full text-gray-500 text-xs">
                     <span>Date Published: </span>
                     <%=article.publish_date%>
@@ -102,12 +126,12 @@
                 </div>
 
                 <a
-                    class="p-3 mt-4 mx-2 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end text-right"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end text-right"
                     href="/dashboard/article/edit-article/<%=article.article_id%>"
                     >Edit</a
                 >
                 <form
-                    class="p-3 mt-4 mx-2 border-red-500 cursor-pointer text-white bg-red-800 hover:bg-red-700 rounded-md self-end"
+                    class="p-3 mt-4 mx-2 text-xs md:text-sm border-red-500 cursor-pointer text-white bg-red-800 hover:bg-red-700 rounded-md self-end"
                     method="post"
                     action="/dashboard/article/<%=article.article_id%>?_method=DELETE"
                 >

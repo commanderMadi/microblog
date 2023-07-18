@@ -4,13 +4,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/styles.css" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <title><%=settingsRow[0].blog_title%> | Log In</title>
     </head>
     <body>
         <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
-        <div class="container w-4/12 mx-auto mt-10">
+        <div class="container w-10/12 md:w-6/12 mx-auto mt-10">
             <!--Page main heading element-->
             <h1 class="text-4xl my-10 w-6/12">Log In</h1>
 
@@ -42,9 +44,16 @@
                 />
 
                 <div class="action-buttons flex justify-between items-center">
-                    <h3>Don't have an account? <a class="text-red-700 font-bold hover:text-indigo-950" href="/register/">Register</a>.</h3>
+                    <h3>
+                        Don't have an account?
+                        <a
+                            class="text-red-700 font-bold hover:text-indigo-950"
+                            href="/register/"
+                            >Register</a
+                        >
+                    </h3>
                     <input
-                        class="p-3 mt-6 border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
+                        class="p-3 mt-6 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
                         type="submit"
                         value="Log In"
                     />

@@ -12,7 +12,8 @@ if (addCommentForm) {
                 comment: commentArea.value,
             })
             .then(function (response) {
-                let { comment, commentAuthor, commentsCount, commentDate } = response.data;
+                let { comment, commentAuthor, commentsCount, commentDate } =
+                    response.data;
                 const commentContainerElement = document.createElement('div');
                 const commentAuthorElement = document.createElement('div');
                 const commentDateElement = document.createElement('div');
@@ -25,14 +26,15 @@ if (addCommentForm) {
                 commentDateElement.textContent = commentDate;
                 commentDateElement.className = 'text-gray-400 text-sm';
 
-                separator.className = 'h-px my-2 bg-gray-200 border-0 dark:bg-gray-700';
+                separator.className = 'h-px my-2 bg-gray-200';
 
                 commentTextElement.textContent = comment;
                 commentTextElement.className = 'mt-4';
 
                 commentsCountElement.textContent = commentsCount;
 
-                commentContainerElement.className = 'container single-comment-container mt-4 mb-4 mx-auto bg-gray-50 rounded-md p-4';
+                commentContainerElement.className =
+                    'container single-comment-container mt-4 mb-4 mx-auto bg-gray-50 rounded-md p-4';
                 commentContainerElement.append(commentAuthorElement);
                 commentContainerElement.append(commentDateElement);
                 commentContainerElement.append(separator);

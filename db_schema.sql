@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS Users (
     user_role TEXT NOT NULL
 );
 
-INSERT INTO Users ("user_name", "user_email", "user_password", "user_role") VALUES ("Admin", "admin@bloggy.com", "admintest123", "Author");
-INSERT INTO BlogSettings ("blog_title", "blog_subtitle", "user_id") VALUES ("Bloggy", "A Simple Microblogging Portable Platform", 1);
+INSERT INTO Users ("user_name", "user_email", "user_password", "user_role") VALUES ("Ahmed", "admin@bloggy.com", "admintest123", "Author");
+INSERT INTO BlogSettings ("blog_title", "blog_subtitle", "user_id") VALUES ("Bloggy", "An Awesome Microblogging Portable Platform", 1);
 
 
 COMMIT;
