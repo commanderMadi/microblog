@@ -1,7 +1,7 @@
 {
-    "name": "cm2040_template",
+    "name": "bloggy",
     "version": "1.0.0",
-    "description": "A template for the mid-term assignment",
+    "description": "A flexible microblogging web application ",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
         "start": "node index.js",
         "devStart": "nodemon index"
     },
-    "author": "Simon Katan",
+    "author": "Ahmed Magdy",
     "license": "ISC",
     "dependencies": {
         "@tailwindcss/forms": "^0.5.3",
