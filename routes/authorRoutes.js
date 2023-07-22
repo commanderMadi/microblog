@@ -21,8 +21,8 @@ const router = express.Router();
 
 /**
  * @desc Get the dashboard page
+ * Passing in the custom middleware checkNotLoggedIn to ensure if the author is authenticated
  */
-// Passing in the custom middleware checkNotLoggedIn to ensure if the author is authenticated
 router.get('/', checkNotLoggedIn, checkRole, (req, res, next) => {
     let getAllArticlesQuery = 'SELECT * FROM Articles';
     // load the settings needed for displaying the blog settings in the navbar partial
