@@ -20,7 +20,7 @@ const changePasswordValidationSchema = require('../schemas/changePasswordValidat
 const router = express.Router();
 
 /**
- * @desc Get the dashboard page
+ * @desc Render the dashboard page
  * Passing in the custom middleware checkNotLoggedIn to ensure if the author is authenticated
  */
 router.get('/', checkNotLoggedIn, checkRole, (req, res, next) => {
@@ -46,7 +46,7 @@ router.get('/', checkNotLoggedIn, checkRole, (req, res, next) => {
 });
 
 /**
- * @desc Get the create article page
+ * @desc Render the create article page
  */
 router.get('/article/create-article', (req, res, next) => {
     let getAllBlogSettingsQuery = `SELECT BlogSettings.user_id, Users.user_name, 
@@ -134,7 +134,7 @@ router.get('/article/edit-article/:id', (req, res, next) => {
 });
 
 /**
- * @desc Update the article contents based on the given article ID that is supplied as a request param
+ * @desc Update the article contents based on the given article ID that is supplied as a request parameter
  * Using the put function to follow the fundamental RESTFUL Api practices
  */
 router.put('/article/edit-article/:id', updateValidationSchema, validate, (req, res, next) => {
@@ -174,7 +174,7 @@ router.put('/article/edit-article/:id', updateValidationSchema, validate, (req, 
 });
 
 /**
- * @desc Delete the article based on the given article ID that is supplied as a request param
+ * @desc Delete the article based on the given article ID that is supplied as a request parameter
  * Using the delete function to follow the fundamental RESTFUL Api practices
  */
 router.delete('/article/:id', (req, res, next) => {
@@ -317,7 +317,7 @@ router.post('/change-password', changePasswordValidationSchema, validate, async 
 });
 
 /**
- * @desc send back the user to the homepage upon logging out
+ * @desc send back the author to the homepage upon logging out
  */
 router.get('/logout', (req, res, next) => {
     req.logout((err) => {
