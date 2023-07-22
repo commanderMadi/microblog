@@ -1,3 +1,4 @@
+// Tailwind configuration
 module.exports = {
     content: ['./views/*.{html,ejs}', './public/html/*.html'],
     theme: {
