@@ -1,72 +1,70 @@
-##  Coursework Template ##
-### CM2040 Database Networks and the Web ###
+# Bloggy
 
-#### Installation requirements ####
+## A flexible microblogging web application By Ahmed Magdy.
 
-* NodeJS 
-    - follow the install instructions at https://nodejs.org/en/
-    - we recommend using the latest LTS version
-* Sqlite3 
-    - Windows users: follow instructions here https://www.sqlitetutorial.net/download-install-sqlite/
-    - Mac users: it comes preinstalled
-    - Linux users: use a package manager eg. apt install
+#### Getting started with my project
 
-To install all the node packages run ```npm install``` from the project directory
+#### Starting the application
 
-#### Help with node SQLite3 ####
+-   Download the project zip folder.
+-   Extract the files.
+-   In your terminal, install all the dependencies by running the command `npm install`.
+-   Build the database using the existent schema file by running the command `npm run build-db`.
+-   Start the application by running the command `npm run start`.
+-   Navigate to your browser and type in `http://localhost:3000` to access the application.
 
-A few aspects SQLite3 work a little differently to mySql but all of the key concepts are the same
+#### Access the Author Dashboard (IMPORTANT)
 
-Find the API documentation at:
-https://github.com/TryGhost/node-sqlite3/wiki/API
+The author dashboard can be accessed via the URL `http://localhost:3000/dashboard`. The author dashboard is password-protected. To access it, you must login. The default credentials for first-time login as an author are as follows:
 
-Find node SQLite tutorials at:
-https://www.sqlitetutorial.net/sqlite-nodejs/
-This also a good resource to find examples and tutorials around SQLite queries
+-   Email: admin@bloggy.com
+-   Password: admintest123
 
+You will be notified to change this password when you login. If you change the password, the new password will be hashed and stored safely in the database.
 
-#### Using this template ####
+#### Login System
 
-This template sets you off in the right direction for your coursework. To get started:
+All users with accounts stored in the database can login to the system via the URL `http://localhost:3000/login`.
 
-Run ```npm run build-db``` to create the database (database.db)
-Run ```npm run start``` to start serving the web app (Access via http://localhost:3000)
+#### Register a user
 
-You can also run: 
-```npm run clean-db``` to delete the database before rebuilding it for a fresh start
+By default, any newly registered user is created with the role "reader". Default users do not have access to the dashboard and will be redirected to the homepage if they try to access the dashboard URL by manually typing it in the browser.
 
-##### Next steps #####
+To register a user, navigate to `http://localhost:3000/register`. You must not be authenticated for this page to render.
 
-* Explore the file structure and code
-* Read all the comments
-* Try accessing each of the routes via the browser - make sure you understand what they do
-* Try creating ejs pages for each of the routes that retrieve and display the data
-* Try enhancing the ```create-user-record``` page so that you can set the text in the record 
-* Try adding new routes and pages to let the user create their own records
+### Extension of Choice
 
-##### Creating database tables #####
+-   Implemented a full login/registration system with route protection for authoring.
+-   Implemented proper redirection using custom middlewares to deny access to protected routes.
+-   Used `PassportJS` Library to authenticate users.
+-   Used `express-session` library to persist and securely store user credentials when logged in.
+-   Used `bcrypt` library to securely hash passwords when registering a new user or updating an existing one.
+-   Used `dotenv` library to store and use environment variables.
 
-* All database tables should created by modifying the db_schema.sql 
-* This allows us to review and recreate your database simply by running ```npm run build-db```
-* Do NOT create or alter database tables through other means
+### Application Features (Some of them were not required but implemented to enrich user experience)
 
+#### All Users Features:
 
-#### Preparing for submission ####
+-   Adding a comment or a like to an article won't require page refreshing (Ajax loading using Axios on the client side).
+-   Ability to login/register an account with proper password hashing for safe storage.
+-   Basic responsive design (Was not the main extension I focused on).
+-   Ability to change password when logged in.
 
-Make a copy of this folder
-In your copy, delete the following files and folders:
-    * node_modules
-    * .git (the hidden folder with your git repository)
-    * database.db (your database)
+#### Author Features:
 
-Make sure that your package.json file includes all of the dependencies for your project NB. you need to use the ```--save``` tag each time you use npm to install a dependency
+-   Ability to login securely to a dashboard for authoring.
+-   Ability to create, edit, delete and publish articles.
+-   Ability to edit blog settings (blog name, blog description and author name)
 
-#### Getting started with my project ####
+### Tools Used
 
-Edit this section to include any settings that should be adjusted in configuration files and concise instructions for how to access the reader and author pages once the app is running.
-
-NB. we will ONLY run ```npm install```, ```npm run build-db```, and ```npm run start``` . We will NOT install additional packages to run your code and will NOT run additional build scripts. Be careful with any additional node dependencies that you use.
-
-
-
-
+-   All the required tools (`ejs`, `sqlite3`, `ExpressJS`, `NodeJs`, `Sqlite`)
+-   `PassportJS`: To authenticate users.
+-   `express-session`: To persist and securely store user credentials when logged in.
+-   `express-flash`: To display success and failure message upon certain user events (creating a draft, editing an article, failed password change attempt, etc).
+-   `express-validator`: To validate data input when attempting certain actions (login/register, updating/creating articles).
+-   `nodemon`: To automatically restart the server when a backend change happens (Used only for development).
+-   `bcrypt`: To hash passwords and store them securely in the database.
+-   `moment`: To obtain formatted date strings to display as article meta information (creation date, publishing date, modification date).
+-   `tailwind`: To style the application (Added a fall back CDN option in all views if tailwind engine failed to compile).
+-   `methodOverride`: To allow the usage of database querying methods like put and delete in HTML forms (To follow RESTFUL best practices).
