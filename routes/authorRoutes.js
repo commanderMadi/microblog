@@ -330,5 +330,5 @@ router.get('/logout', (req, res, next) => {
     });
 });
 
-// export the express router
+// export the router
 module.exports = router;

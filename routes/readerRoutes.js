@@ -177,4 +177,5 @@ router.get('/logout', (req, res, next) => {
     });
 });
 
+// export the router
 module.exports = router;
