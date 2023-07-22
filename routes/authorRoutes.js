@@ -10,7 +10,7 @@ const validate = require('../middleware/validate');
 const checkNotLoggedIn = require('../middleware/checkNotLoggedIn');
 const checkRole = require('../middleware/checkRole');
 
-// Custom validation schema dependencies
+// Custom validation schemas
 const insertionValidationSchema = require('../schemas/insertionValidationSchema');
 const updateValidationSchema = require('../schemas/updateValidationSchema');
 const updateSettingsValidationSchema = require('../schemas/updateSettingsValidationSchema');

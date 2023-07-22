@@ -10,7 +10,7 @@ const checkUserAuth = require('../middleware/checkLoggedIn');
 const router = express.Router();
 
 /**
- * @desc Render the dashboard page
+ * @desc Render the login page
  * Passing in the custom middleware checkUserAuth to check whether the user is authenticated
  * If the user is not authenticated, they will be redirected to the login page
  * Authentication is needed to add comments or likes as a user or to login to the dashboard as an author
