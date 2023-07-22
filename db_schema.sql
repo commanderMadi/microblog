@@ -4,7 +4,7 @@ PRAGMA foreign_keys=ON;
 
 BEGIN TRANSACTION;
 
-
+-- Articles table
 CREATE TABLE IF NOT EXISTS Articles (
     article_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Articles (
     publish_state TEXT NOT NULL
 );
 
+-- Comments table
 CREATE TABLE IF NOT EXISTS Comments (
     comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     comment_author TEXT NOT NULL,
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS Comments (
     FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
+-- Likes table
 CREATE TABLE IF NOT EXISTS Likes (
     like_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
@@ -37,6 +39,7 @@ CREATE TABLE IF NOT EXISTS Likes (
     FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
+-- Blog settings table
 CREATE TABLE IF NOT EXISTS BlogSettings (
     blog_title TEXT NOT NULL,
     blog_subtitle TEXT NOT NULL,
@@ -44,7 +47,7 @@ CREATE TABLE IF NOT EXISTS BlogSettings (
     FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
-
+-- Users table
 CREATE TABLE IF NOT EXISTS Users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_name TEXT NOT NULL,
@@ -53,6 +56,7 @@ CREATE TABLE IF NOT EXISTS Users (
     user_role TEXT NOT NULL
 );
 
+-- Inserting initial default data for the author and the blog settings
 INSERT INTO Users ("user_name", "user_email", "user_password", "user_role") VALUES ("Ahmed", "admin@bloggy.com", "admintest123", "Author");
 INSERT INTO BlogSettings ("blog_title", "blog_subtitle", "user_id") VALUES ("Bloggy", "An Awesome Microblogging Portable Platform", 1);
 
