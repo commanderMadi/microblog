@@ -60,6 +60,7 @@ To register a user, navigate to `http://localhost:3000/register`. You must not b
 
 -   All the required tools (`ejs`, `sqlite3`, `ExpressJS`, `NodeJs`, `Sqlite`)
 -   `PassportJS`: To authenticate users.
+-   `Axios`: To render article comments, comments counts and like counts immediately upon adding them without the need for a page refresh.
 -   `express-session`: To persist and securely store user credentials when logged in.
 -   `express-flash`: To display success and failure message upon certain user events (creating a draft, editing an article, failed password change attempt, etc).
 -   `express-validator`: To validate data input when attempting certain actions (login/register, updating/creating articles).
