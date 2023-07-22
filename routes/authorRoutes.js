@@ -22,6 +22,7 @@ const router = express.Router();
 /**
  * @desc Render the dashboard page
  * Passing in the custom middleware checkNotLoggedIn to ensure if the author is authenticated
+ * Passing in the custom middleware checkRole to ensure that the user trying to access the dashboard is an author
  */
 router.get('/', checkNotLoggedIn, checkRole, (req, res, next) => {
     let getAllArticlesQuery = 'SELECT * FROM Articles';
