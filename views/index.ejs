@@ -10,10 +10,12 @@
     </head>
 
     <body>
+
         <!--Render the navbar partial-->
         <%-include('partials/navbar') %>
 
         <main class="wrapper">
+
             <!-- Display an alert message for authors who log in with the default password stored in the db schema file to change their password-->
             <% if (req.user && req.user.user_role==="Author" && authorFirstTimeLogin)
             {%>
@@ -31,7 +33,8 @@
             <%}%>
 
             <section class="published-articles-section">
-                <!-- If there are no published articles, display a message that reflects this and make it unique for authors -->
+
+                <%# If there are no published articles, display a message that reflects this and make it unique for authors %>
                 <% if (rows.length === 0 && req.user && req.user.user_role ===
                 "Author") { %>
                 <h1 class="text-center text-red-800 text-4xl mt-10">
@@ -39,7 +42,8 @@
                     <a class="text-indigo-900" href="/dashboard">dashboard</a> to
                     create some articles.
                 </h1>
-                <!-- If there are no published articles, display a message that reflects this to all users who are not authors -->
+
+                <%# If there are no published articles, display a message that reflects this to all users who are not authors %>
                 <% } else if (rows.length === 0) { %>
                 <h1 class="text-center text-red-800 text-4xl mt-10">
                     No published articles yet. Wait for the authors to publish some
@@ -47,7 +51,8 @@
                 </h1>
 
                 <%}else { %>
-                <!-- Otherwise, display the main page heading -->
+
+                <%# Otherwise, display the main page heading %>
                 <h1
                     class="text-2xl md:text-4xl mt-10 mb-5 ml-3 published-articles-title"
                 >
@@ -58,9 +63,10 @@
                 <div
                     class="mx-auto container published-articles-container content-center align-items-center grid grid-rows-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
                 >
-                    <!-- Display published articles. Published articles are sorted in the backend by publish date, in descending order-->
-                    <!-- Hence, the very first article in the rows we get will always be the newest one-->
-                    <!-- if that's the case, we add a "Latest" text to this article to make it stand out-->
+                    <%# Display published articles. Published articles are sorted in the backend by publish date, in descending order%>
+                    <%# Hence, the very first article in the rows we get will always be the newest one %>
+                    <%# if that's the case, we add a "Latest" text to this article to make it stand out %>
+                    
                     <% rows.forEach((article,i)=> { if( i === 0) {%>
                     <div
                         class="flex flex-col justify-end m-3 article-container border shadow border-stone-400 text-center"

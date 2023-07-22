@@ -45,8 +45,9 @@
             </h2>
 
             <%} %>
-            <!-- Loop over all drafts and render them-->
+            
             <% rows.forEach(article=> { if (article.publish_state === "Draft") { %>
+            <%#=Loop over all drafts and display them%>
             <div
                 class="single-draft-container rounded-lg shadow mb-10 flex flex-wrap bg-slate-200 p-5 justify-end"
             >
@@ -92,7 +93,8 @@
         >
             <header class="flex flex-col justify-between mb-10">
                 <h2 class="text-2xl md:text-3xl ml-1 my-5">Published</h2>
-                <!-- Check all articles with the state "Published". If there aren't any, display a message to reflect this -->
+
+                <%#Check all articles with the state "Published". If there aren't any, display a message to reflect this%>
                 <%var publishedCount=0; rows.forEach(article=> article.publish_state
                 === "Published" ? ++publishedCount : false);%> <%if(publishedCount
                 === 0) { %>
@@ -102,7 +104,8 @@
 
                 <%}%>
             </header>
-            <!-- Display published articles in dashboard after sorting them on the front end in descending order. Newly published appear first -->
+
+            <%#Display published articles in dashboard after sorting them on the front end in descending order. Newly published appear first%>
             <% rows.sort((a,b)=> {if (a.publish_state.length &&
             b.publish_state.length){ return a.publish_date < b.publish_date ? 1 :
             -1}}).forEach(article=> { if (article.publish_state !== "Draft") { %>
@@ -142,7 +145,7 @@
             <%}})%>
         </div>
     </body>
-    <!--Script to display a brief message when a draft is created successfully.-->
+    <!--- Script to clear the on draft creation success message after 3 seconds. -->
     <script>
         const successMsgElement = document.getElementById('draft-creation-success');
         function clearMessage() {
