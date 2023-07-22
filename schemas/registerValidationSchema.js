@@ -1,5 +1,11 @@
+// Require 3rd party dependencies
 const { body } = require('express-validator');
 
+// user registration validation schema
+// all fields must not be empty
+// A username has a specific min and max length
+// email field is checked to ensure its an email
+// A db query is executed to check if the input email is already registered or if any error was encountered
 const registerValidationSchema = [
     body('username', 'Username minimum length is 3 and maximum is 20').exists().isLength({ min: 5, max: 20 }),
     body('email', 'You must provide a correct email address')
@@ -30,4 +36,5 @@ const registerValidationSchema = [
         .withMessage('The passwords you entered do not match.'),
 ];
 
+// export the schema
 module.exports = registerValidationSchema;
