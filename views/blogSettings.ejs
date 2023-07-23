@@ -11,7 +11,9 @@
     <body class="overflow-hidden">
         <!--Render the navbar partial-->
         <%-include('partials/navbar')%>
-        <div class="container w-10/12 md:w-6/12 mx-auto mt-10 flex flex-col">
+        <div
+            class="container w-10/12 md:w-9/12 xl:w-8/12 mx-auto mt-10 flex flex-col"
+        >
             <header
                 class="shadow border-2 border-gray-200 p-4 flex justify-between flex-col"
             >
@@ -52,6 +54,9 @@
                         name="blog_title"
                         value="<%=settingsRow[0].blog_title%>"
                     />
+                    <span class="text-xs mt-0.5 text-gray-700 italic"
+                        >Blog title minimum length is 2 and maximum is 25.</span
+                    >
                     <label class="block my-4" for="blog_subtitle"
                         >Blog Subtitle</label
                     >
@@ -61,6 +66,9 @@
                         name="blog_subtitle"
                         value="<%=settingsRow[0].blog_subtitle%>"
                     />
+                    <span class="text-xs mt-0.5 text-gray-700 italic"
+                        >Blog subtitle minimum length is 2 and maximum is 100.</span
+                    >
                     <label class="block my-4" for="user_name">Author Name</label>
                     <input
                         class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
@@ -68,6 +76,9 @@
                         name="user_name"
                         value="<%=settingsRow[0].user_name%>"
                     />
+                    <span class="text-xs mt-0.5 text-gray-700 italic"
+                        >Author name minimum length is 2 and maximum is 25.</span
+                    >
                     <div class="action-buttons flex justify-end">
                         <input
                             class="p-3 mx-2 text-xs md:text-sm border-indigo-500 cursor-pointer text-white bg-indigo-800 hover:bg-indigo-950 rounded-md self-end"
