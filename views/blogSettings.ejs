@@ -21,7 +21,7 @@
                 <h1 class="text-2xl md:text-4xl mb-4 my-6">Settings</h1>
                 <a
                     class="p-3 mt-1 border-indigo-500 cursor-pointer text-white bg-indigo-950 hover:bg-indigo-900 rounded-md self-start text-xs md:text-sm"
-                    href="/dashboard/change-password"
+                    href="/change-password"
                     >Change Password</a
                 >
             </header>
@@ -42,11 +42,7 @@
                 <h1 class="text-2xl md:text-4xl mt-5 w-8/12 md:w-6/12 my-6">
                     Blog Details
                 </h1>
-                <form
-                    class="flex flex-col"
-                    method="post"
-                    action="/dashboard/settings"
-                >
+                <form class="flex flex-col" method="post" action="/settings">
                     <label class="block my-4" for="blog_title">Blog Title</label>
                     <input
                         class="bg-slate-50 w-full appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-800"
