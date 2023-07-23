@@ -9,7 +9,7 @@ const { body } = require('express-validator');
 const registerValidationSchema = [
     body('username', 'Username minimum length is 3 and maximum is 20')
         .exists()
-        .isLength({ min: 5, max: 20 }),
+        .isLength({ min: 3, max: 20 }),
     body('email', 'You must provide a correct email address')
         .exists()
         .isEmail()
