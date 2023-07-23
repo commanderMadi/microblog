@@ -5,15 +5,18 @@ const { body } = require('express-validator');
 // passwords (old and new) must not be empty
 // new password and its confirmation must match
 const changePasswordValidationSchema = [
-    body('old_password', 'Old password cannot be empty').exists().notEmpty(),
-    body('new_password', 'New Password cannot be empty').exists().notEmpty(),
+    body('old_password', 'Old password cannot be empty.').exists().notEmpty(),
+    body('new_password', 'New Password minimum length is 6.')
+        .exists()
+        .isLength({ min: 6, max: undefined })
+        .notEmpty(),
     // Logic to check if password and confirmation are different
     // https://stackoverflow.com/questions/12548624/validate-a-password-with-express-validator
     body('confirm_new_password')
         .exists({ checkFalsy: true })
-        .withMessage('New Password confirmation cannot be empty')
+        .withMessage('New Password confirmation cannot be empty.')
         .custom((value, { req }) => value === req.body.new_password)
-        .withMessage('The new passwords do not match'),
+        .withMessage('The new passwords do not match.'),
 ];
 
 // export the schema
