@@ -14,9 +14,9 @@
 
         <article
             id="article-main-container"
-            class="mt-10 container w-10/12 md:w-6/12 font-roboto bg-slate-50 shadow mx-auto"
+            class="mt-10 container w-10/12 md:w-8/12 lg:w-6/12 font-roboto bg-slate-50 shadow mx-auto"
         >
-            <header class="article-information bg-indigo-950 mt-10 p-3">
+            <header class="article-information bg-indigo-950 mt-10 px-3 py-3">
                 <h1
                     class="mb-1 ml-4 text-gray-300 my-6 py-6 text-3xl md:text-4xl lg:text-5xl"
                 >
@@ -36,9 +36,9 @@
                 </div>
             </header>
 
-            <div class="container w-10/12 md:w-6/12 article-contents-container mt-6">
+            <div class="container bg-slate-200 article-contents-container">
                 <p
-                    class="text-gray-700 leading-7 px-3 py-8 ml-2 mt-2 text-base article-contents"
+                    class="text-gray-700 leading-7 px-3 py-8 ml-2 text-base article-contents"
                 >
                     <%=rows[0].contents%>
                 </p>
@@ -46,7 +46,7 @@
         </article>
         <div
             id="interactions-container"
-            class="container flex w-10/12 md:w-6/12 items-center justify-end bg-indigo-950 shadow p-4 mx-auto"
+            class="container flex w-10/12 md:w-8/12 lg:w-6/12 items-center justify-end bg-indigo-950 shadow p-4 mx-auto"
         >
             <%if (req.user) {%>
 
@@ -69,7 +69,7 @@
         </div>
         <div
             id="comments-container"
-            class="mt-10 mb-8 container w-10/12 md:w-6/12 mx-auto"
+            class="mt-10 mb-8 container w-10/12 md:w-8/12 lg:w-6/12 mx-auto"
         >
             <h3 class="text-3xl comments-container-heading text-gray-500">
                 Comments: <span id="comments-count"><%=commentsRows.length%></span>
@@ -89,7 +89,7 @@
         </div>
 
         <div
-            class="add-comments-container flex container w-10/12 md:w-6/12 mt-4 mx-auto"
+            class="add-comments-container flex container w-10/12 md:w-8/12 lg:w-6/12 mt-4 mx-auto"
         >
             <% if (req.user) {%>
             <form
