@@ -3,7 +3,6 @@ const express = require('express');
 const moment = require('moment');
 const assert = require('assert');
 const { body } = require('express-validator');
-const bcrypt = require('bcrypt');
 
 // custom middleware
 const validate = require('../middleware/validate');

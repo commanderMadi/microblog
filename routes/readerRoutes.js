@@ -2,6 +2,7 @@
 const express = require('express');
 const assert = require('assert');
 const moment = require('moment');
+const bcrypt = require('bcrypt');
 
 // custom middleware
 const validate = require('../middleware/validate');
